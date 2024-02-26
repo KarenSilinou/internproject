@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SelectUser from '../screens/onboarding/SelectUser';
 import Splash from '../screens/onboarding/Splash';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
+import AddJob from '../screens/internposting/tabs/AddJob';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {
@@ -16,6 +17,12 @@ const MainNavigator = () => {
         <STACK.Screen
           name="Splash"
           component={Splash}
+          options={{headerShown: false}}
+        />
+
+        <STACK.Screen
+          name="AddJob"
+          component={AddJob}
           options={{headerShown: false}}
         />
 

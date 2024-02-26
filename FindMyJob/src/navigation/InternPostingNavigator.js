@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SignUpForCompany from '../screens/internposting/SignUpForCompany';
 import LoginForCompany from '../screens/internposting/LoginForCompany';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
+import AddJob from '../screens/internposting/tabs/AddJob';
 
 const STACK = createStackNavigator();
 const InternPostingNavigator = () => {
@@ -24,6 +25,12 @@ const InternPostingNavigator = () => {
       <STACK.Screen
         name="DashboardForCompany"
         component={DashboardForCompany}
+        options={{headerShown: false}}
+      />
+
+      <STACK.Screen
+        name="AddJob"
+        component={AddJob}
         options={{headerShown: false}}
       />
     </STACK.Navigator>
