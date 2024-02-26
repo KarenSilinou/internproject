@@ -1,10 +1,11 @@
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
-import {moderateScale} from 'react-native-size-matters';
+import {moderateScale, verticalScale} from 'react-native-size-matters';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const MyJobs = () => {
   const isFocused = useIsFocused();
@@ -37,9 +38,17 @@ const MyJobs = () => {
             <View style={styles.jobItem}>
               <Text style={styles.title}>{item.jobTitle}</Text>
               <Text style={styles.desc}>{item.jobDesc}</Text>
-              <Text style={styles.title}>{item.Category}</Text>
-              <Text style={styles.title}>{item.jobTime + ' Mois'}</Text>
-              <Text style={styles.title}>{item.skill}</Text>
+              <Text style={styles.duree}>
+                {'Categorie: ' + item.category + ''}
+              </Text>
+              <Text style={styles.duree}>
+                {'Duree: ' + item.jobTime + ' Mois'}
+              </Text>
+              <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+              <View style={styles.bottomView}>
+                <TouchableOpacity style={styles.editBtn}></TouchableOpacity>
+                <TouchableOpacity style={styles.deleteBtn}></TouchableOpacity>
+              </View>
             </View>
           );
         }}
@@ -77,4 +86,26 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: moderateScale(5),
   },
+  duree: {
+    fontSize: moderateScale(15),
+    fontWeight: '600',
+    marginTop: moderateScale(5),
+  },
+  bottomView: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginBottom: moderateScale(20),
+    alignItems: 'center',
+    marginTop: moderateScale(15),
+  },
+  editBtn: {
+    width: '40%',
+    height: verticalScale(30),
+    borderWidth: 1,
+    borderRadius: moderateScale(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteBtn: {},
 });

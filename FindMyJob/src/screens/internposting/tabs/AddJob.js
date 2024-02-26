@@ -46,6 +46,7 @@ const AddJob = () => {
         jobTitle: jobTitle,
         jobDesc,
         company,
+        jobTime,
         skill: selectedSkill,
         category: profiles[selectedCategory].category,
       })
@@ -135,6 +136,7 @@ const AddJob = () => {
         onChangeText={txt => {
           setJobTime(txt);
         }}
+        keyboardType={'number-pad'}
         title={'Duree du stage'}
         //bad={badEmail != '' ? true : false}
         placeholder={'ex 2mois'}
