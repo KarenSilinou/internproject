@@ -9,14 +9,20 @@ import {
 import {BG_COLOR} from '../utils/Colors';
 import {TextInput} from 'react-native-gesture-handler';
 
-const CustomDropDown = ({title, placeholder, bad}) => {
+const CustomDropDown = ({title, placeholder, bad, onClick}) => {
   return (
     <TouchableOpacity
-      style={[styles.input, {borderColor: bad ? 'red' : '#9e9e9e'}]}>
+      style={[styles.input, {borderColor: bad ? 'red' : '#9e9e9e'}]}
+      onPress={() => {
+        onClick();
+      }}>
       <Text style={[styles.title, {color: bad ? 'red' : 'black'}]}>
         {title}
       </Text>
-      <Text style={{color: '#9e9e9e'}}>{placeholder}</Text>
+      <Text
+        style={{color: placeholder.includes('Select') ? '#9e9e9e' : 'black'}}>
+        {placeholder}
+      </Text>
       <Image source={require('../images/down-arrow.png')} style={styles.icon} />
     </TouchableOpacity>
   );
