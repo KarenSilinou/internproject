@@ -47,35 +47,35 @@ const MyInterns = () => {
         <FlatList
           data={interns}
           renderItem={({item, index}) => {
-            return (
-              <View style={styles.internItem}>
-                <Text style={styles.title}>{item.internTitle}</Text>
-                <Text style={styles.desc}>{item.internDesc}</Text>
-                <Text style={styles.duree}>
-                  {'Categorie: ' + item.category + ''}
-                </Text>
-                <Text style={styles.duree}>
-                  {'Duree: ' + item.internTime + ' Mois'}
-                </Text>
-                <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
-                <View style={styles.bottomView}>
-                  <Pressable
-                    style={styles.editBtn}
-                    onPress={() => {
-                      navigation.navigate('EditIntern', {data: item});
-                    }}>
-                    <Text>Modifier l'offre</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.deleteBtn}
-                    onPress={() => {
-                      deleteIntern(item.id);
-                    }}>
-                    <Text style={{color: 'red'}}>Supprimer l'offre</Text>
-                  </Pressable>
-                </View>
-              </View>
-            );
+            // return (
+            //   <View style={styles.internItem}>
+            //     <Text style={styles.title}>{item.internTitle}</Text>
+            //     <Text style={styles.desc}>{item.internDesc}</Text>
+            //     <Text style={styles.duree}>
+            //       {'Categorie: ' + item.category + ''}
+            //     </Text>
+            //     <Text style={styles.duree}>
+            //       {'Duree: ' + item.internTime + ' Mois'}
+            //     </Text>
+            //     <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+            //     <View style={styles.bottomView}>
+            //       <Pressable
+            //         style={styles.editBtn}
+            //         onPress={() => {
+            //           navigation.navigate('EditIntern', {data: item});
+            //         }}>
+            //         <Text>Modifier l'offre</Text>
+            //       </Pressable>
+            //       <Pressable
+            //         style={styles.deleteBtn}
+            //         onPress={() => {
+            //           deleteIntern(item.id);
+            //         }}>
+            //         <Text style={{color: 'red'}}>Supprimer l'offre</Text>
+            //       </Pressable>
+            //     </View>
+            //   </View>
+            // );
           }}
         />
       ) : (

@@ -74,6 +74,7 @@ const AddIntern = () => {
     let validSkill = true;
     let validCompany = true;
     let validInternTime = true;
+    let validCompanyAddress = true;
 
     if (internTitle == '') {
       validInternTitle = false;
@@ -86,10 +87,63 @@ const AddIntern = () => {
     if (internDesc == '') {
       validInternDesc = false;
       setBadInternDesc("Svp entrez la description de l'offre");
-    } else if (internDesc != '') {
+    } else if (internDesc != '' && internDesc.length < 50) {
+      validInternDesc = false;
+      setBadInternDesc("Svp entrez une description d'au moins 50 caracteres");
+    } else if (internDesc != '' && internDesc.length >= 50) {
       validInternDesc = true;
       setBadInternDesc('');
     }
+
+    if (selectedCategory == 'Select category') {
+      validCategory = false;
+      setBadInternCategory("Svp entrez la categorie de l'offre");
+    } else if (selectedCategory == 'Select category') {
+      validCategory = true;
+      setBadInternCategory('');
+    }
+
+    if (selectedSkill == 'Select skill') {
+      validCategory = false;
+      setBadInternSkill('Svp entrez la competence');
+    } else if (selectedSkill == 'Select skill') {
+      validSkill = true;
+      setBadInternSkill('');
+    }
+
+    if (setCompany == '') {
+      validCompany = false;
+      setBadCompany('Svp entrez la compagnie');
+    } else if (setCompany == '') {
+      validSkill = true;
+      setBadCompany('');
+    }
+
+    if (internTime == '') {
+      validInternTime = false;
+      setBadInternTime("Svp entrez la periode de l'offre");
+    } else if (internTitle != '') {
+      validInternTime = true;
+      setBadInternTime('');
+    }
+
+    if (companyAddress == '') {
+      validCompanyAddress = false;
+      setBadCompanyAddress("Svp entrez l'adresse de l'entreprise");
+    } else if (companyAddress != '') {
+      validCompanyAddress = true;
+      setBadCompanyAddress('');
+    }
+
+    return (
+      validInternTitle &&
+      validInternDesc &&
+      validCategory &&
+      validSkill &&
+      validCompany &&
+      validCompanyAddress &&
+      validInternTime
+    );
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -111,17 +165,20 @@ const AddIntern = () => {
           setInternTiltle(txt);
         }}
         title={'Libelle du stage'}
-        //bad={badEmail != '' ? true : false}
+        bad={badInternTitle != '' ? true : false}
         placeholder={'ex: Developpement web'}
         style={styles.textInput}
       />
+      {badInternTitle != '' && (
+        <Text style={styles.errorMsg}>{badInternTitle}</Text>
+      )}
       <CustomDropDown
         value={internDesc}
         onChangeText={txt => {
           setInternDesc(txt);
         }}
         title={'Categorie'}
-        //bad={badEmail != '' ? true : false}
+        bad={badInternCategory != '' ? true : false}
         placeholder={
           selectedCategory == 'Selected category'
             ? 'Selected category'
@@ -131,38 +188,48 @@ const AddIntern = () => {
           setCategoryModal(true);
         }}
       />
+      {badInternCategory != '' && (
+        <Text style={styles.errorMsg}>{badInternCategory}</Text>
+      )}
       <CustomDropDown
         value={internDesc}
         onChangeText={txt => {
           setInternDesc(txt);
         }}
         title={'Competence'}
-        //bad={badEmail != '' ? true : false}
+        bad={badInternSkill != '' ? true : false}
         placeholder={selectedSkill}
         onClick={() => {
           setSkillModal(true);
         }}
       />
+      {badInternSkill != '' && (
+        <Text style={styles.errorMsg}>{badInternSkill}</Text>
+      )}
       <CustomTextInput
         value={company}
         onChangeText={txt => {
           setCompany(txt);
         }}
         title={'Entreprise'}
-        //bad={badEmail != '' ? true : false}
+        bad={badcompany != '' ? true : false}
         placeholder={'ex Google'}
         style={styles.textInput}
       />
+      {badcompany != '' && <Text style={styles.errorMsg}>{badcompany}</Text>}
       <CustomTextInput
         value={companyAddress}
         onChangeText={txt => {
           setCompanyAdress(txt);
         }}
         title={"Adresse de l'entreprise"}
-        //bad={badEmail != '' ? true : false}
+        bad={badCompanyAddress != '' ? true : false}
         placeholder={'ex Akwa'}
         style={styles.textInput}
       />
+      {badCompanyAddress != '' && (
+        <Text style={styles.errorMsg}>{badCompanyAddress}</Text>
+      )}
       <CustomTextInput
         value={internTime}
         onChangeText={txt => {
@@ -170,10 +237,13 @@ const AddIntern = () => {
         }}
         keyboardType={'number-pad'}
         title={'Duree du stage'}
-        //bad={badEmail != '' ? true : false}
+        bad={badInternTime != '' ? true : false}
         placeholder={'ex 2mois'}
         style={styles.textInput}
       />
+      {badInternTime != '' && (
+        <Text style={styles.errorMsg}>{badInternTime}</Text>
+      )}
       <CustomTextInput
         value={internDesc}
         multiline
@@ -182,14 +252,19 @@ const AddIntern = () => {
           setInternDesc(txt);
         }}
         title={'Description du stage'}
-        //bad={badEmail != '' ? true : false}
+        bad={badInternDesc != '' ? true : false}
         placeholder={"ex: C'est un stage en development web"}
         style={styles.textInput}
       />
+      {badInternDesc != '' && (
+        <Text style={styles.errorMsg}>{badInternDesc}</Text>
+      )}
       <CustomSolidBtn
         title={"Poster l'offre"}
         onClick={() => {
-          postIntern();
+          if (validate()) {
+            postIntern();
+          }
         }}
       />
       <Modal visible={openCategoryModal} transparent style={{flex: 1}}>
@@ -272,6 +347,7 @@ const styles = StyleSheet.create({
     marginLeft: moderateScale(20),
     fontWeight: '600',
   },
+  textInput: {},
   modalMainView: {
     backgroundColor: 'rgba(0,0,0,.3)',
     width: '100%',
@@ -292,5 +368,9 @@ const styles = StyleSheet.create({
     paddingLeft: moderateScale(20),
     alignSelf: 'center',
     borderBottomWidth: 0.4,
+  },
+  errorMsg: {
+    color: 'red',
+    marginLeft: moderateScale(25),
   },
 });
