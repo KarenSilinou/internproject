@@ -8,6 +8,7 @@ import SelectUser from '../screens/onboarding/SelectUser';
 import Splash from '../screens/onboarding/Splash';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
 import AddJob from '../screens/internposting/tabs/AddJob';
+import EditJob from '../screens/internposting/tabs/EditJob';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {
@@ -23,6 +24,12 @@ const MainNavigator = () => {
         <STACK.Screen
           name="AddJob"
           component={AddJob}
+          options={{headerShown: false}}
+        />
+
+        <STACK.Screen
+          name="EditJob"
+          component={EditJob}
           options={{headerShown: false}}
         />
 

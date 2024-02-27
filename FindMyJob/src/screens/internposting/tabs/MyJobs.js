@@ -1,14 +1,15 @@
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
 import {moderateScale, verticalScale} from 'react-native-size-matters';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const MyJobs = () => {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const [jobs, setJobs] = useState([
     useEffect(() => {
       getJob();
@@ -28,31 +29,60 @@ const MyJobs = () => {
         setJobs(temp);
       });
   };
+
+  const deleteJob = id => {
+    firestore()
+      .collection('jobs')
+      .doc(id)
+      .delete()
+      .then(() => {
+        getJob();
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>INTERNGLOBE</Text>
-      <FlatList
-        data={jobs}
-        renderItem={({item, index}) => {
-          return (
-            <View style={styles.jobItem}>
-              <Text style={styles.title}>{item.jobTitle}</Text>
-              <Text style={styles.desc}>{item.jobDesc}</Text>
-              <Text style={styles.duree}>
-                {'Categorie: ' + item.category + ''}
-              </Text>
-              <Text style={styles.duree}>
-                {'Duree: ' + item.jobTime + ' Mois'}
-              </Text>
-              <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
-              <View style={styles.bottomView}>
-                <TouchableOpacity style={styles.editBtn}></TouchableOpacity>
-                <TouchableOpacity style={styles.deleteBtn}></TouchableOpacity>
+      {jobs.length > 0 ? (
+        <FlatList
+          data={jobs}
+          renderItem={({item, index}) => {
+            return (
+              <View style={styles.jobItem}>
+                <Text style={styles.title}>{item.jobTitle}</Text>
+                <Text style={styles.desc}>{item.jobDesc}</Text>
+                <Text style={styles.duree}>
+                  {'Categorie: ' + item.category + ''}
+                </Text>
+                <Text style={styles.duree}>
+                  {'Duree: ' + item.jobTime + ' Mois'}
+                </Text>
+                <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+                <View style={styles.bottomView}>
+                  <Pressable
+                    style={styles.editBtn}
+                    onPress={() => {
+                      navigation.navigate('EditJob', {data: item});
+                    }}>
+                    <Text>Modifier l'offre</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.deleteBtn}
+                    onPress={() => {
+                      deleteJob(item.id);
+                    }}>
+                    <Text style={{color: 'red'}}>Supprimer l'offre</Text>
+                  </Pressable>
+                </View>
               </View>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <Text style={styles.title}>Aucune offre</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -107,5 +137,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  deleteBtn: {},
+  deleteBtn: {
+    width: '40%',
+    height: verticalScale(30),
+    borderWidth: 1,
+    borderRadius: moderateScale(10),
+    borderColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyView: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
