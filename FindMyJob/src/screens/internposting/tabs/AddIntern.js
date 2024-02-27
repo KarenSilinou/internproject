@@ -21,32 +21,39 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../../common/Loader';
 
-const AddJob = () => {
-  const [jobTitle, setJobTiltle] = useState('');
-  const [jobDesc, setJobDesc] = useState('');
+const AddIntern = () => {
+  const [internTitle, setInternTiltle] = useState('');
+  const [badInternTitle, setBadInternTitle] = useState('');
+  const [internDesc, setInternDesc] = useState('');
+  const [badInternDesc, setBadInternDesc] = useState('');
   const [company, setCompany] = useState('');
+  const [badcompany, setBadCompany] = useState('');
   const [companyAddress, setCompanyAdress] = useState('');
-  const [jobTime, setJobTime] = useState('');
+  const [badCompanyAddress, setBadCompanyAddress] = useState('');
+  const [internTime, setInternTime] = useState('');
+  const [badInternTime, setBadInternTime] = useState('');
   const navigation = useNavigation();
   const [openCategoryModal, setCategoryModal] = useState(false);
   const [openSkillModal, setSkillModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Selected category');
+  const [badInternCategory, setBadInternCategory] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('Selected skill');
+  const [badInternSkill, setBadInternSkill] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const postJob = async () => {
+  const postIntern = async () => {
     let id = await AsyncStorage.getItem('USER_ID');
     let name = await AsyncStorage.getItem('NAME');
     setLoading(true);
     firestore()
-      .collection('jobs')
+      .collection('interns')
       .add({
         postedBy: id,
         posterName: name,
-        jobTitle: jobTitle,
-        jobDesc,
+        internTitle: internTitle,
+        internDesc,
         company,
-        jobTime,
+        internTime,
         skill: selectedSkill,
         category: profiles[selectedCategory].category,
       })
@@ -58,6 +65,31 @@ const AddJob = () => {
         setLoading(false);
         console.log(err);
       });
+  };
+
+  const validate = () => {
+    let validInternTitle = true;
+    let validInternDesc = true;
+    let validCategory = true;
+    let validSkill = true;
+    let validCompany = true;
+    let validInternTime = true;
+
+    if (internTitle == '') {
+      validInternTitle = false;
+      setBadInternTitle("Svp entrez le titre de l'offre");
+    } else if (internTitle != '') {
+      validInternTitle = true;
+      setBadInternTitle('');
+    }
+
+    if (internDesc == '') {
+      validInternDesc = false;
+      setBadInternDesc("Svp entrez la description de l'offre");
+    } else if (internDesc != '') {
+      validInternDesc = true;
+      setBadInternDesc('');
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -71,12 +103,12 @@ const AddJob = () => {
             style={styles.back}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Ajouter un stage</Text>
+        <Text style={styles.title}>Ajouter une offre</Text>
       </View>
       <CustomTextInput
-        value={jobTitle}
+        value={internTitle}
         onChangeText={txt => {
-          setJobTiltle(txt);
+          setInternTiltle(txt);
         }}
         title={'Libelle du stage'}
         //bad={badEmail != '' ? true : false}
@@ -84,9 +116,9 @@ const AddJob = () => {
         style={styles.textInput}
       />
       <CustomDropDown
-        value={jobDesc}
+        value={internDesc}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Categorie'}
         //bad={badEmail != '' ? true : false}
@@ -100,9 +132,9 @@ const AddJob = () => {
         }}
       />
       <CustomDropDown
-        value={jobDesc}
+        value={internDesc}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Competence'}
         //bad={badEmail != '' ? true : false}
@@ -132,9 +164,9 @@ const AddJob = () => {
         style={styles.textInput}
       />
       <CustomTextInput
-        value={jobTime}
+        value={internTime}
         onChangeText={txt => {
-          setJobTime(txt);
+          setInternTime(txt);
         }}
         keyboardType={'number-pad'}
         title={'Duree du stage'}
@@ -143,11 +175,11 @@ const AddJob = () => {
         style={styles.textInput}
       />
       <CustomTextInput
-        value={jobDesc}
+        value={internDesc}
         multiline
         numberOfLines={4}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Description du stage'}
         //bad={badEmail != '' ? true : false}
@@ -157,7 +189,7 @@ const AddJob = () => {
       <CustomSolidBtn
         title={"Poster l'offre"}
         onClick={() => {
-          postJob();
+          postIntern();
         }}
       />
       <Modal visible={openCategoryModal} transparent style={{flex: 1}}>
@@ -218,7 +250,7 @@ const AddJob = () => {
   );
 };
 
-export default AddJob;
+export default AddIntern;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

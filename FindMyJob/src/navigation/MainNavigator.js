@@ -7,8 +7,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SelectUser from '../screens/onboarding/SelectUser';
 import Splash from '../screens/onboarding/Splash';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
-import AddJob from '../screens/internposting/tabs/AddJob';
-import EditJob from '../screens/internposting/tabs/EditJob';
+import AddIntern from '../screens/internposting/tabs/AddIntern';
+import EditIntern from '../screens/internposting/tabs/EditIntern';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {
@@ -22,14 +22,14 @@ const MainNavigator = () => {
         />
 
         <STACK.Screen
-          name="AddJob"
-          component={AddJob}
+          name="AddIntern"
+          component={AddIntern}
           options={{headerShown: false}}
         />
 
         <STACK.Screen
-          name="EditJob"
-          component={EditJob}
+          name="EditIntern"
+          component={EditIntern}
           options={{headerShown: false}}
         />
 

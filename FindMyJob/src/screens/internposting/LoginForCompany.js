@@ -60,7 +60,7 @@ const LoginForCompany = () => {
   const loginUser = () => {
     setLoading(true);
     firestore()
-      .collection('job_posters')
+      .collection('intern_posters')
       .where('email', '==', email)
       .get()
       .then(data => {

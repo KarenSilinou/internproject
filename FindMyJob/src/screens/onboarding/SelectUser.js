@@ -23,7 +23,7 @@ const SelectUser = () => {
         }}>
         <Text style={styles.btnTxt1}>Poster une offre de stage</Text>
       </Pressable>
-      <Pressable style={styles.wantToJob}>
+      <Pressable style={styles.wantToIntern}>
         <Text style={styles.btnTxt2}>Postuler pour une offre de stage</Text>
       </Pressable>
     </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: moderateVerticalScale(20),
   },
-  wantToJob: {
+  wantToIntern: {
     width: '90%',
     height: verticalScale(45),
     borderWidth: 1,

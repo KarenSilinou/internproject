@@ -15,21 +15,21 @@ const Splash = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      getData();
-      //navigation.navigate('DashboardForCompany');
+      // getData();
+      navigation.navigate('DashboardForCompany');
     }, 3000);
   }, []);
 
-  const getData = async () => {
-    let type = await AsyncStorage.getItem('USER_TYPE');
-    if (type != null) {
-      if (type == 'company') {
-        navigation.navigate('DashboardForCompany');
-      } else {
-        navigation.navigate('SelectUser');
-      }
-    }
-  };
+  // const getData = async () => {
+  //   let type = await AsyncStorage.getItem('USER_TYPE');
+  //   if (type != null) {
+  //     if (type == 'company') {
+  //       navigation.navigate('DashboardForCompany');
+  //     } else {
+  //       navigation.navigate('SelectUser');
+  //     }
+  //   }
+  // };
 
   return (
     <View style={styles.container}>

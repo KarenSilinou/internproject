@@ -157,7 +157,7 @@ const SignUpForCompany = () => {
 
   const registerUser = () => {
     firestore()
-      .collection('job_posters')
+      .collection('intern_posters')
       .add({
         name,
         email,

@@ -7,18 +7,18 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const MyJobs = () => {
+const MyInterns = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const [jobs, setJobs] = useState([
+  const [interns, setInterns] = useState([
     useEffect(() => {
-      getJob();
+      getIntern();
     }, [isFocused]),
   ]);
-  const getJob = async () => {
+  const getIntern = async () => {
     let id = await AsyncStorage.getItem('USER_ID');
     firestore()
-      .collection('jobs')
+      .collection('interns')
       .where('postedBy', '==', id)
       .get()
       .then(data => {
@@ -26,50 +26,50 @@ const MyJobs = () => {
         data.docs.forEach(item => {
           temp.push({...item.data(), id: item.id});
         });
-        setJobs(temp);
+        setInterns(temp);
       });
   };
 
-  const deleteJob = id => {
+  const deleteIntern = id => {
     firestore()
-      .collection('jobs')
+      .collection('interns')
       .doc(id)
       .delete()
       .then(() => {
-        getJob();
+        getIntern();
       });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>INTERNGLOBE</Text>
-      {jobs.length > 0 ? (
+      {interns.length > 0 ? (
         <FlatList
-          data={jobs}
+          data={interns}
           renderItem={({item, index}) => {
             return (
-              <View style={styles.jobItem}>
-                <Text style={styles.title}>{item.jobTitle}</Text>
-                <Text style={styles.desc}>{item.jobDesc}</Text>
+              <View style={styles.internItem}>
+                <Text style={styles.title}>{item.internTitle}</Text>
+                <Text style={styles.desc}>{item.internDesc}</Text>
                 <Text style={styles.duree}>
                   {'Categorie: ' + item.category + ''}
                 </Text>
                 <Text style={styles.duree}>
-                  {'Duree: ' + item.jobTime + ' Mois'}
+                  {'Duree: ' + item.internTime + ' Mois'}
                 </Text>
                 <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
                 <View style={styles.bottomView}>
                   <Pressable
                     style={styles.editBtn}
                     onPress={() => {
-                      navigation.navigate('EditJob', {data: item});
+                      navigation.navigate('EditIntern', {data: item});
                     }}>
                     <Text>Modifier l'offre</Text>
                   </Pressable>
                   <Pressable
                     style={styles.deleteBtn}
                     onPress={() => {
-                      deleteJob(item.id);
+                      deleteIntern(item.id);
                     }}>
                     <Text style={{color: 'red'}}>Supprimer l'offre</Text>
                   </Pressable>
@@ -87,7 +87,7 @@ const MyJobs = () => {
   );
 };
 
-export default MyJobs;
+export default MyInterns;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: TEXT_BLUE,
   },
-  jobItem: {
+  internItem: {
     width: '90%',
     alignSelf: 'center',
     marginTop: moderateScale(20),

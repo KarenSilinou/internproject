@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {BG_COLOR} from '../../utils/Colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
-import MyJobs from './tabs/MyJobs';
+import MyInterns from './tabs/MyIntern';
 import SearchCandidates from './tabs/SearchCandidates';
 import Chats from './tabs/Chats';
 import Profile1 from './tabs/Profile1';
@@ -15,7 +15,7 @@ const DashboardForCompany = () => {
   return (
     <SafeAreaView style={styles.container}>
       {selectedTab == 0 ? (
-        <MyJobs />
+        <MyInterns />
       ) : selectedTab == 1 ? (
         <SearchCandidates />
       ) : selectedTab == 2 ? (
@@ -66,7 +66,7 @@ const DashboardForCompany = () => {
           style={styles.bottomTab}
           onPress={() => {
             //setSelectedTab(2);
-            navigation.navigate('AddJob');
+            navigation.navigate('AddIntern');
           }}>
           <Image
             source={require('../../images/addition.png')}

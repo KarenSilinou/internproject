@@ -21,15 +21,17 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../../common/Loader';
 
-const EditJob = () => {
+const EditIntern = () => {
   const route = useRoute();
-  const [jobTitle, setJobTiltle] = useState(route.params.data.jobTitle);
-  const [jobDesc, setJobDesc] = useState(route.params.data.jobDesc);
+  const [internTitle, setInternTiltle] = useState(
+    route.params.data.internTitle,
+  );
+  const [internDesc, setInternDesc] = useState(route.params.data.internDesc);
   const [company, setCompany] = useState(route.params.data.company);
   const [companyAddress, setCompanyAdress] = useState(
     route.params.data.companyAddress,
   );
-  const [jobTime, setJobTime] = useState(route.params.data.jobTime);
+  const [internTime, setInternTime] = useState(route.params.data.internTime);
   const navigation = useNavigation();
   const [openCategoryModal, setCategoryModal] = useState(false);
   const [openSkillModal, setSkillModal] = useState(false);
@@ -49,20 +51,20 @@ const EditJob = () => {
       }
     });
   }, []);
-  const postJob = async () => {
+  const postIntern = async () => {
     let id = await AsyncStorage.getItem('USER_ID');
     let name = await AsyncStorage.getItem('NAME');
     setLoading(true);
     firestore()
-      .collection('jobs')
+      .collection('interns')
       .doc(route.params.data.id)
       .update({
         postedBy: id,
         posterName: name,
-        jobTitle: jobTitle,
-        jobDesc,
+        internTitle: internTitle,
+        internDesc,
         company,
-        jobTime,
+        internTime,
         skill: selectedSkill,
         category: profiles[selectedCategory].category,
       })
@@ -87,12 +89,12 @@ const EditJob = () => {
             style={styles.back}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Modifier un stage</Text>
+        <Text style={styles.title}>Modifier l'offre</Text>
       </View>
       <CustomTextInput
-        value={jobTitle}
+        value={internTitle}
         onChangeText={txt => {
-          setJobTiltle(txt);
+          setInternTiltle(txt);
         }}
         title={'Libelle du stage'}
         //bad={badEmail != '' ? true : false}
@@ -100,9 +102,9 @@ const EditJob = () => {
         style={styles.textInput}
       />
       <CustomDropDown
-        value={jobDesc}
+        value={internDesc}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Categorie'}
         //bad={badEmail != '' ? true : false}
@@ -116,9 +118,9 @@ const EditJob = () => {
         }}
       />
       <CustomDropDown
-        value={jobDesc}
+        value={internDesc}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Competence'}
         //bad={badEmail != '' ? true : false}
@@ -148,9 +150,9 @@ const EditJob = () => {
         style={styles.textInput}
       />
       <CustomTextInput
-        value={jobTime}
+        value={internTime}
         onChangeText={txt => {
-          setJobTime(txt);
+          setInternTime(txt);
         }}
         keyboardType={'number-pad'}
         title={'Duree du stage'}
@@ -159,11 +161,11 @@ const EditJob = () => {
         style={styles.textInput}
       />
       <CustomTextInput
-        value={jobDesc}
+        value={internDesc}
         multiline
         numberOfLines={4}
         onChangeText={txt => {
-          setJobDesc(txt);
+          setInternDesc(txt);
         }}
         title={'Description du stage'}
         //bad={badEmail != '' ? true : false}
@@ -173,7 +175,7 @@ const EditJob = () => {
       <CustomSolidBtn
         title={"Modifier l'offre"}
         onClick={() => {
-          postJob();
+          postIntern();
         }}
       />
       <Modal visible={openCategoryModal} transparent style={{flex: 1}}>
@@ -234,7 +236,7 @@ const EditJob = () => {
   );
 };
 
-export default EditJob;
+export default EditIntern;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
