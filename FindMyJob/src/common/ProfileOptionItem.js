@@ -1,6 +1,10 @@
 import {View, Text, Pressable, Image} from 'react-native';
 import React from 'react';
-import {moderateVerticalScale, scale} from 'react-native-size-matters';
+import {
+  moderateScale,
+  moderateVerticalScale,
+  scale,
+} from 'react-native-size-matters';
 
 const ProfileOptionItem = ({title, icon, onClick}) => {
   return (
@@ -13,7 +17,10 @@ const ProfileOptionItem = ({title, icon, onClick}) => {
         alignItems: 'center',
         marginTop: moderateVerticalScale(20),
       }}>
-      <Image source={icon} style={{width: scale(16), height: scale(16)}} />
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Image source={icon} style={{width: scale(20), height: scale(20)}} />
+        <Text style={{marginLeft: moderateScale(15)}}>{title}</Text>
+      </View>
     </Pressable>
   );
 };

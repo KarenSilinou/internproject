@@ -27,10 +27,22 @@ const Profile1 = () => {
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.changeProfilePic}>Modifier le profile</Text>
       <Text style={styles.changeProfilePic}>Modifier la photo de profile</Text>
-      <ProfileOptionItem icon={require('../../../images/intern.png')} />
-      <ProfileOptionItem icon={require('../../../images/contact.png')} />
-      <ProfileOptionItem icon={require('../../../images/theme.png')} />
-      <ProfileOptionItem icon={require('../../../images/logout.png')} />
+      <ProfileOptionItem
+        icon={require('../../../images/intern.png')}
+        title={'Mes offres'}
+      />
+      <ProfileOptionItem
+        icon={require('../../../images/contact.png')}
+        title={'Contactez nous'}
+      />
+      <ProfileOptionItem
+        icon={require('../../../images/theme.png')}
+        title={'Theme'}
+      />
+      <ProfileOptionItem
+        icon={require('../../../images/logout.png')}
+        title={'Deconnexion'}
+      />
     </View>
   );
 };
