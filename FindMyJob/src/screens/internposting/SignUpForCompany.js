@@ -233,7 +233,7 @@ const SignUpForCompany = () => {
             onChangeText={txt => {
               setCompanyName(txt);
             }}
-            title={'Nom de la companie'}
+            title={'Nom de la compagnie'}
             placeholder={'ex: SONARA SARL'}
             style={styles.textInput}
             bad={badCompanyName != '' ? true : false}
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     width: scale(130),
     height: scale(130),
     alignSelf: 'center',
-    marginTop: moderateVerticalScale(40),
+    marginTop: moderateVerticalScale(25),
     backgroundColor: 'transparent',
   },
   title: {

@@ -87,10 +87,10 @@ const AddIntern = () => {
     if (internDesc == '') {
       validInternDesc = false;
       setBadInternDesc("Svp entrez la description de l'offre");
-    } else if (internDesc != '' && internDesc.length < 50) {
+    } else if (internDesc != '' && internDesc.length < 10) {
       validInternDesc = false;
-      setBadInternDesc("Svp entrez une description d'au moins 50 caracteres");
-    } else if (internDesc != '' && internDesc.length >= 50) {
+      setBadInternDesc("Svp entrez une description d'au moins 10 caracteres");
+    } else if (internDesc != '' && internDesc.length >= 10) {
       validInternDesc = true;
       setBadInternDesc('');
     }
