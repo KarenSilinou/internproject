@@ -10,6 +10,7 @@ import DashboardForCompany from '../screens/internposting/DashboardForCompany';
 import AddIntern from '../screens/internposting/tabs/AddIntern';
 import EditIntern from '../screens/internposting/tabs/EditIntern';
 import UpdateProfileForCompany from '../screens/internposting/UpdateProfileForCompany';
+import ChangeProfilePicForCompany from '../screens/internposting/ChangeProfilePicForCompany';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {
@@ -37,6 +38,12 @@ const MainNavigator = () => {
         <STACK.Screen
           name="UpdateProfileForCompany"
           component={UpdateProfileForCompany}
+          options={{headerShown: false}}
+        />
+
+        <STACK.Screen
+          name="ChangeProfilePicForCompany"
+          component={ChangeProfilePicForCompany}
           options={{headerShown: false}}
         />
 

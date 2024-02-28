@@ -47,7 +47,13 @@ const Profile1 = ({onInternsClick}) => {
         }}>
         Modifier le profil
       </Text>
-      <Text style={styles.changeProfilePic}>Modifier la photo de profile</Text>
+      <Text
+        style={styles.changeProfilePic}
+        onPress={() => {
+          navigation.navigate('ChangeProfilePicForCompany');
+        }}>
+        Modifier la photo de profile
+      </Text>
       <View style={styles.optionArea}>
         <ProfileOptionItem
           icon={require('../../../images/intern.png')}
