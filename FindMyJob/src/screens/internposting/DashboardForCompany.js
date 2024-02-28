@@ -30,7 +30,6 @@ const DashboardForCompany = () => {
       ) : (
         <Profile1
           onInternsClick={() => {
-            Alert.alert('Salut');
             setSelectedTab(0);
           }}
         />

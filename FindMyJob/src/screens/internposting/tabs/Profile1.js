@@ -15,12 +15,13 @@ import {
 } from 'react-native-size-matters';
 import {BG_COLOR, TEXT_BLUE, TEXT_COLOR} from '../../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import ProfileOptionItem from '../../../common/ProfileOptionItem';
 
 const Profile1 = ({onInternsClick}) => {
   const [name, setName] = useState('');
   const [interns, setInterns] = useState('');
+  const navigation = useNavigation();
   const isFocused = useIsFocused();
   useEffect(() => {
     getData();
@@ -39,7 +40,13 @@ const Profile1 = ({onInternsClick}) => {
         />
       </TouchableOpacity>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.changeProfilePic}>Modifier le profil</Text>
+      <Text
+        style={styles.changeProfilePic}
+        onPress={() => {
+          navigation.navigate('UpdateProfileForCompany');
+        }}>
+        Modifier le profil
+      </Text>
       <Text style={styles.changeProfilePic}>Modifier la photo de profile</Text>
       <View style={styles.optionArea}>
         <ProfileOptionItem
@@ -52,14 +59,17 @@ const Profile1 = ({onInternsClick}) => {
         <ProfileOptionItem
           icon={require('../../../images/contact.png')}
           title={'Contactez nous'}
+          onClick={() => {}}
         />
         <ProfileOptionItem
           icon={require('../../../images/theme.png')}
           title={'Theme'}
+          onClick={() => {}}
         />
         <ProfileOptionItem
           icon={require('../../../images/logout.png')}
           title={'Deconnexion'}
+          onClick={() => {}}
         />
       </View>
     </View>

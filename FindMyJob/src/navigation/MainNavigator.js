@@ -9,6 +9,7 @@ import Splash from '../screens/onboarding/Splash';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
 import AddIntern from '../screens/internposting/tabs/AddIntern';
 import EditIntern from '../screens/internposting/tabs/EditIntern';
+import UpdateProfileForCompany from '../screens/internposting/UpdateProfileForCompany';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {
@@ -30,6 +31,12 @@ const MainNavigator = () => {
         <STACK.Screen
           name="EditIntern"
           component={EditIntern}
+          options={{headerShown: false}}
+        />
+
+        <STACK.Screen
+          name="UpdateProfileForCompany"
+          component={UpdateProfileForCompany}
           options={{headerShown: false}}
         />
 

@@ -16,6 +16,9 @@ const ProfileOptionItem = ({title, icon, onClick}) => {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: moderateVerticalScale(20),
+      }}
+      onPress={() => {
+        onClick();
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image source={icon} style={{width: scale(20), height: scale(20)}} />
@@ -25,7 +28,7 @@ const ProfileOptionItem = ({title, icon, onClick}) => {
         </Text>
       </View>
       <Image
-        source={require('../images/share.png')}
+        source={require('../images/right.png')}
         style={{width: scale(10), height: scale(10)}}
       />
     </TouchableOpacity>
