@@ -1,4 +1,4 @@
-import {View, Text, Pressable, Image} from 'react-native';
+import {View, Text, Pressable, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {
   moderateScale,
@@ -8,7 +8,7 @@ import {
 
 const ProfileOptionItem = ({title, icon, onClick}) => {
   return (
-    <Pressable
+    <TouchableOpacity
       style={{
         width: '90%',
         alignSelf: 'center',
@@ -19,9 +19,16 @@ const ProfileOptionItem = ({title, icon, onClick}) => {
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image source={icon} style={{width: scale(20), height: scale(20)}} />
-        <Text style={{marginLeft: moderateScale(15)}}>{title}</Text>
+        <Text
+          style={{marginLeft: moderateScale(15), fontSize: moderateScale(18)}}>
+          {title}
+        </Text>
       </View>
-    </Pressable>
+      <Image
+        source={require('../images/share.png')}
+        style={{width: scale(10), height: scale(10)}}
+      />
+    </TouchableOpacity>
   );
 };
 

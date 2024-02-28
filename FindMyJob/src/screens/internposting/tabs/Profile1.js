@@ -1,48 +1,67 @@
-import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {
+  moderateScale,
+  moderateVerticalScale,
+  scale,
+  verticalScale,
+} from 'react-native-size-matters';
 import {BG_COLOR, TEXT_BLUE, TEXT_COLOR} from '../../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import ProfileOptionItem from '../../../common/ProfileOptionItem';
 
-const Profile1 = () => {
+const Profile1 = ({onInternsClick}) => {
   const [name, setName] = useState('');
+  const [interns, setInterns] = useState('');
   const isFocused = useIsFocused();
   useEffect(() => {
     getData();
   }, [isFocused]);
   const getData = async () => {
     setName(await AsyncStorage.getItem('NAME'));
+    setInterns(await AsyncStorage.getItem('INTERNS'));
   };
   return (
     <View>
       <Text style={styles.heading}>INTERNGLOBE</Text>
-      <Pressable>
+      <TouchableOpacity>
         <Image
           source={require('../../../images/profile.png')}
           style={styles.profileImg}
         />
-      </Pressable>
+      </TouchableOpacity>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.changeProfilePic}>Modifier le profile</Text>
+      <Text style={styles.changeProfilePic}>Modifier le profil</Text>
       <Text style={styles.changeProfilePic}>Modifier la photo de profile</Text>
-      <ProfileOptionItem
-        icon={require('../../../images/intern.png')}
-        title={'Mes offres'}
-      />
-      <ProfileOptionItem
-        icon={require('../../../images/contact.png')}
-        title={'Contactez nous'}
-      />
-      <ProfileOptionItem
-        icon={require('../../../images/theme.png')}
-        title={'Theme'}
-      />
-      <ProfileOptionItem
-        icon={require('../../../images/logout.png')}
-        title={'Deconnexion'}
-      />
+      <View style={styles.optionArea}>
+        <ProfileOptionItem
+          icon={require('../../../images/intern.png')}
+          title={'Mes offres (' + interns + ')'}
+          onClick={() => {
+            onInternsClick();
+          }}
+        />
+        <ProfileOptionItem
+          icon={require('../../../images/contact.png')}
+          title={'Contactez nous'}
+        />
+        <ProfileOptionItem
+          icon={require('../../../images/theme.png')}
+          title={'Theme'}
+        />
+        <ProfileOptionItem
+          icon={require('../../../images/logout.png')}
+          title={'Deconnexion'}
+        />
+      </View>
     </View>
   );
 };
@@ -78,5 +97,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     alignSelf: 'center',
     marginTop: moderateScale(10),
+  },
+  optionArea: {
+    marginTop: moderateVerticalScale(70),
   },
 });

@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {BG_COLOR} from '../../utils/Colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -21,7 +28,12 @@ const DashboardForCompany = () => {
       ) : selectedTab == 2 ? (
         <Chats />
       ) : (
-        <Profile1 />
+        <Profile1
+          onInternsClick={() => {
+            Alert.alert('Salut');
+            setSelectedTab(0);
+          }}
+        />
       )}
       <View style={styles.bottomView}>
         <TouchableOpacity
