@@ -6,22 +6,28 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import LinearGradient from 'react-native-linear-gradient';
 
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 const MyInterns = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [interns, setInterns] = useState([
     useEffect(() => {
       getIntern();
     }, [isFocused]),
   ]);
   const getIntern = async () => {
+    setLoading(true);
     let id = await AsyncStorage.getItem('USER_ID');
     firestore()
       .collection('interns')
       .where('postedBy', '==', id)
       .get()
       .then(async data => {
+        setLoading(false);
         let temp = [];
         data.docs.forEach(item => {
           temp.push({...item.data(), id: item.id});
@@ -44,39 +50,62 @@ const MyInterns = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>INTERNGLOBE</Text>
+      {loading && (
+        <View>
+          <FlatList
+            data={[1, 2, 3]}
+            renderItem={({item, index}) => {
+              return (
+                <View style={styles.loaderView}>
+                  <ShimmerPlaceholder style={styles.loaderTitle} />
+                  <ShimmerPlaceholder style={styles.loaderTitle} />
+                  <ShimmerPlaceholder style={styles.loaderTitle} />
+                  <ShimmerPlaceholder style={styles.loaderTitle} />
+                  <ShimmerPlaceholder style={styles.loaderTitle} />
+                  <View style={styles.loaderBottomView}>
+                    <ShimmerPlaceholder style={styles.loaderBtn} />
+                    <ShimmerPlaceholder style={styles.loaderBtn} />
+                  </View>
+                </View>
+              );
+            }}
+          />
+        </View>
+      )}
+
       {interns.length > 0 ? (
         <FlatList
           data={interns}
           renderItem={({item, index}) => {
-            // return (
-            //   <View style={styles.internItem}>
-            //     <Text style={styles.title}>{item.internTitle}</Text>
-            //     <Text style={styles.desc}>{item.internDesc}</Text>
-            //     <Text style={styles.duree}>
-            //       {'Categorie: ' + item.category + ''}
-            //     </Text>
-            //     <Text style={styles.duree}>
-            //       {'Duree: ' + item.internTime + ' Mois'}
-            //     </Text>
-            //     <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
-            //     <View style={styles.bottomView}>
-            //       <Pressable
-            //         style={styles.editBtn}
-            //         onPress={() => {
-            //           navigation.navigate('EditIntern', {data: item});
-            //         }}>
-            //         <Text>Modifier l'offre</Text>
-            //       </Pressable>
-            //       <Pressable
-            //         style={styles.deleteBtn}
-            //         onPress={() => {
-            //           deleteIntern(item.id);
-            //         }}>
-            //         <Text style={{color: 'red'}}>Supprimer l'offre</Text>
-            //       </Pressable>
-            //     </View>
-            //   </View>
-            // );
+            return (
+              <View style={styles.internItem}>
+                <Text style={styles.title}>{item.internTitle}</Text>
+                <Text style={styles.desc}>{item.internDesc}</Text>
+                <Text style={styles.duree}>
+                  {'Categorie: ' + item.category + ''}
+                </Text>
+                <Text style={styles.duree}>
+                  {'Duree: ' + item.internTime + ' Mois'}
+                </Text>
+                <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+                <View style={styles.bottomView}>
+                  <Pressable
+                    style={styles.editBtn}
+                    onPress={() => {
+                      navigation.navigate('EditIntern', {data: item});
+                    }}>
+                    <Text>Modifier l'offre</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.deleteBtn}
+                    onPress={() => {
+                      deleteIntern(item.id);
+                    }}>
+                    <Text style={{color: 'red'}}>Supprimer l'offre</Text>
+                  </Pressable>
+                </View>
+              </View>
+            );
           }}
         />
       ) : (
@@ -152,5 +181,28 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loaderView: {
+    width: '90%',
+    height: moderateScale(150),
+    alignSelf: 'center',
+    marginTop: moderateScale(20),
+  },
+  loaderTitle: {
+    width: '70%',
+    height: verticalScale(20),
+    borderRadius: moderateScale(10),
+    marginTop: moderateScale(10),
+  },
+  loaderBottomView: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: moderateScale(10),
+  },
+  loaderBtn: {
+    width: '46%',
+    height: verticalScale(30),
+    borderRadius: moderateScale(10),
   },
 });

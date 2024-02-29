@@ -21,6 +21,7 @@ import ProfileOptionItem from '../../../common/ProfileOptionItem';
 const Profile1 = ({onInternsClick}) => {
   const [name, setName] = useState('');
   const [interns, setInterns] = useState('');
+  const [profileImg, setProfileImg] = useState('');
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -29,15 +30,24 @@ const Profile1 = ({onInternsClick}) => {
   const getData = async () => {
     setName(await AsyncStorage.getItem('NAME'));
     setInterns(await AsyncStorage.getItem('INTERNS'));
+    let img = await AsyncStorage.getItem('PROFILE_IMAGE');
+    console.log(img);
+    if (img != null) {
+      setProfileImg();
+    }
   };
   return (
     <View>
       <Text style={styles.heading}>INTERNGLOBE</Text>
       <TouchableOpacity>
-        <Image
-          source={require('../../../images/profile.png')}
-          style={styles.profileImg}
-        />
+        {profileImg != '' ? (
+          <Image source={{uri: profileImg}} style={styles.profileImg} />
+        ) : (
+          <Image
+            source={require('../../../images/profile.png')}
+            style={styles.profileImg}
+          />
+        )}
       </TouchableOpacity>
       <Text style={styles.name}>{name}</Text>
       <Text

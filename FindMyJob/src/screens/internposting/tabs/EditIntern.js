@@ -41,9 +41,11 @@ const EditIntern = () => {
   const [openCategoryModal, setCategoryModal] = useState(false);
   const [openSkillModal, setSkillModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Selected category');
+  const [badInternCategory, setBadInternCategory] = useState('');
   const [selectedSkill, setSelectedSkill] = useState(
     'Selectionner une competence',
   );
+  const [badInternSkill, setBadInternSkill] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
