@@ -1,4 +1,4 @@
-import {View, Text, Pressable, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {
   moderateScale,

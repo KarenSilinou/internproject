@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {BG_COLOR, TEXT_BLUE1, TEXT_COLOR} from '../../utils/Colors';
 import {
@@ -7,7 +7,6 @@ import {
   scale,
   verticalScale,
 } from 'react-native-size-matters';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
 const SelectUser = () => {
@@ -16,16 +15,20 @@ const SelectUser = () => {
     <View style={styles.container}>
       <Image source={require('../../images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Que voulez vous ?</Text>
-      <Pressable
+      <TouchableOpacity
         style={styles.wantToHire}
         onPress={() => {
           navigation.navigate('InternPostingNavigator');
         }}>
         <Text style={styles.btnTxt1}>Poster une offre de stage</Text>
-      </Pressable>
-      <Pressable style={styles.wantToIntern}>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.wantToIntern}
+        onPress={() => {
+          navigation.navigate('InternSearchingNavigator');
+        }}>
         <Text style={styles.btnTxt2}>Postuler pour une offre de stage</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };

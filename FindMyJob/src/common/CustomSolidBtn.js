@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {
   moderateScale,
@@ -15,13 +9,13 @@ import {BG_COLOR, TEXT_BLUE, TEXT_COLOR} from '../utils/Colors';
 
 const CustomSolidBtn = ({title, onClick}) => {
   return (
-    <Pressable
+    <TouchableOpacity
       style={styles.btn}
       onPress={() => {
         onClick();
       }}>
       <Text style={styles.title}>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

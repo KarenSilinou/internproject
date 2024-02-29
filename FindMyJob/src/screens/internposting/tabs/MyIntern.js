@@ -1,11 +1,10 @@
-import {View, Text, StyleSheet, FlatList, Pressable} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
 import {moderateScale, verticalScale} from 'react-native-size-matters';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -89,20 +88,20 @@ const MyInterns = () => {
                 </Text>
                 <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
                 <View style={styles.bottomView}>
-                  <Pressable
+                  <TouchableOpacity
                     style={styles.editBtn}
                     onPress={() => {
                       navigation.navigate('EditIntern', {data: item});
                     }}>
                     <Text>Modifier l'offre</Text>
-                  </Pressable>
-                  <Pressable
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     style={styles.deleteBtn}
                     onPress={() => {
                       deleteIntern(item.id);
                     }}>
                     <Text style={{color: 'red'}}>Supprimer l'offre</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               </View>
             );

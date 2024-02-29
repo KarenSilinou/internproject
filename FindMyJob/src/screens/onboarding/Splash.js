@@ -15,8 +15,8 @@ const Splash = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // getData();
-      navigation.navigate('DashboardForCompany');
+      //getData();
+      navigation.navigate('SelectUser');
     }, 3000);
   }, []);
 
