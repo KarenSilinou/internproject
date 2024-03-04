@@ -2,11 +2,25 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {moderateScale, scale} from 'react-native-size-matters';
 import {BG_COLOR} from '../../utils/Colors';
+import Applies from './tabs/Applies';
+import Home from './tabs/Home';
+import Inbox from './tabs/Inbox';
+import Profile from './tabs/Profile';
 
 const DrawerScreen = () => {
   const [currentTab, setCurrentTab] = useState(0);
   return (
     <View style={styles.container}>
+      {currentTab == 0 ? (
+        <Home />
+      ) : currentTab == 1 ? (
+        <Applies />
+      ) : currentTab == 2 ? (
+        <Inbox />
+      ) : (
+        <Profile />
+      )}
+
       <View style={styles.bottomNavView}>
         <TouchableOpacity
           style={styles.tab}
