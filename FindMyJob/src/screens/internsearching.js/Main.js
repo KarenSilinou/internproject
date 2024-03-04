@@ -1,14 +1,14 @@
-import {View, Text} from 'react-native';
-import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import React from 'react';
 import DrawerScreen from './Drawer';
 
-const Drawer = createDrawerNavigator();
+const CustomDrawerNavigator = createDrawerNavigator(); // Renommez le composant Drawer en CustomDrawerNavigator
+
 const Main = () => {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Drawer" component={DrawerScreen} />
-    </Drawer.Navigator>
+    <CustomDrawerNavigator.Navigator>
+      <CustomDrawerNavigator.Screen name="Drawer" component={DrawerScreen} />
+    </CustomDrawerNavigator.Navigator>
   );
 };
 

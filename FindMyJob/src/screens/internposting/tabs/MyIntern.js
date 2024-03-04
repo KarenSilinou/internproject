@@ -76,35 +76,35 @@ const MyInterns = () => {
         <FlatList
           data={interns}
           renderItem={({item, index}) => {
-            return (
-              <View style={styles.internItem} keys={index}>
-                <Text style={styles.title}>{item.internTitle}</Text>
-                <Text style={styles.desc}>{item.internDesc}</Text>
-                <Text style={styles.duree}>
-                  {'Categorie: ' + item.category + ''}
-                </Text>
-                <Text style={styles.duree}>
-                  {'Duree: ' + item.internTime + ' Mois'}
-                </Text>
-                <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
-                <View style={styles.bottomView}>
-                  <TouchableOpacity
-                    style={styles.editBtn}
-                    onPress={() => {
-                      navigation.navigate('EditIntern', {data: item});
-                    }}>
-                    <Text>Modifier l'offre</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.deleteBtn}
-                    onPress={() => {
-                      deleteIntern(item.id);
-                    }}>
-                    <Text style={{color: 'red'}}>Supprimer l'offre</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
+            // return (
+            //   <View style={styles.internItem} keys={index}>
+            //     <Text style={styles.title}>{item.internTitle}</Text>
+            //     <Text style={styles.desc}>{item.internDesc}</Text>
+            //     <Text style={styles.duree}>
+            //       {'Categorie: ' + item.category + ''}
+            //     </Text>
+            //     <Text style={styles.duree}>
+            //       {'Duree: ' + item.internTime + ' Mois'}
+            //     </Text>
+            //     <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+            //     <View style={styles.bottomView}>
+            //       <TouchableOpacity
+            //         style={styles.editBtn}
+            //         onPress={() => {
+            //           navigation.navigate('EditIntern', {data: item});
+            //         }}>
+            //         <Text>Modifier l'offre</Text>
+            //       </TouchableOpacity>
+            //       <TouchableOpacity
+            //         style={styles.deleteBtn}
+            //         onPress={() => {
+            //           deleteIntern(item.id);
+            //         }}>
+            //         <Text style={{color: 'red'}}>Supprimer l'offre</Text>
+            //       </TouchableOpacity>
+            //     </View>
+            //   </View>
+            // );
           }}
         />
       ) : (
