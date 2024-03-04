@@ -77,7 +77,7 @@ const MyInterns = () => {
           data={interns}
           renderItem={({item, index}) => {
             return (
-              <View style={styles.internItem}>
+              <View style={styles.internItem} keys={index}>
                 <Text style={styles.title}>{item.internTitle}</Text>
                 <Text style={styles.desc}>{item.internDesc}</Text>
                 <Text style={styles.duree}>
