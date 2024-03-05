@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import {
   moderateScale,
   moderateVerticalScale,
@@ -38,6 +39,20 @@ const CustomDrawer = () => {
           <Text style={styles.btnText}>S'inscrire</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.separator}></View>
+      <FlatList
+        data={[{title: 'Evaluez-nous', icon: require('../../images/rate.png')}]}
+        renderItem={({item, index}) => {
+          return (
+            <TouchableOpacity style={styles.menuItem}>
+              <View style={styles.menuItemLeftView}>
+                <Image source={item.icon} style={styles.menuItemIcon} />
+                <Text>{item.title}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -96,5 +111,28 @@ const styles = StyleSheet.create({
   btnText: {
     fontWeight: '500',
     fontSize: moderateScale(10),
+  },
+  separator: {
+    width: '90%',
+    height: verticalScale(0.5),
+    opacity: 0.5,
+    backgroundColor: '#9e9e9e',
+    alignSelf: 'center',
+    marginTop: moderateScale(20),
+  },
+  menuItem: {
+    width: '90%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  menuItemLeftView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  menuItemIcon: {
+    width: scale(24),
+    height: scale(24),
   },
 });
