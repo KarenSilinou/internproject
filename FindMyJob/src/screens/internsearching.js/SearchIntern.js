@@ -67,6 +67,12 @@ const SearchIntern = () => {
           return (
             <View style={styles.internItem}>
               <Text style={styles.internTitle}>{item.internTitle}</Text>
+              <Text style={styles.subTitle}>
+                {'Categorie: ' + item.category}
+              </Text>
+              <Text style={styles.subTitle}>
+                {'Poster par: ' + item.posterName}
+              </Text>
             </View>
           );
         }}
@@ -110,16 +116,19 @@ const styles = StyleSheet.create({
   },
   internItem: {
     width: '90%',
-    height: verticalScale(100),
     backgroundColor: '#f2f2f2',
     alignSelf: 'center',
     marginTop: moderateScale(20),
-    padding: moderateScale(10),
+    padding: moderateScale(15),
     borderRadius: moderateScale(10),
   },
   internTitle: {
     fontSize: moderateScale(22),
     fontWeight: '600',
     width: '100%',
+  },
+  subTitle: {
+    fontSize: moderateScale(16),
+    fontWeight: '500',
   },
 });
