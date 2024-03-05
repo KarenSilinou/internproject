@@ -4,6 +4,7 @@ import InternDetails from '../screens/internsearching.js/InternDetails';
 import LoginForUser from '../screens/internsearching.js/LoginForUser';
 import Main from '../screens/internsearching.js/Main';
 import SearchIntern from '../screens/internsearching.js/SearchIntern';
+import SignUpForUser from '../screens/internsearching.js/SignUpForUser';
 import {TEXT_BLUE} from '../utils/Colors';
 
 const Stack = createStackNavigator();
@@ -38,7 +39,16 @@ const InternSearchingNavigator = () => {
         component={LoginForUser}
         options={{
           headerShown: true,
-          title: 'Se Connecter',
+          title: '',
+          headerTintColor: TEXT_BLUE,
+        }}
+      />
+      <Stack.Screen
+        name="SignUpForUser"
+        component={SignUpForUser}
+        options={{
+          headerShown: true,
+          title: '',
           headerTintColor: TEXT_BLUE,
         }}
       />

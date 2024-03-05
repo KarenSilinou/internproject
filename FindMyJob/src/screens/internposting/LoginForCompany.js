@@ -1,19 +1,19 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
+import {Image, StyleSheet, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
 } from 'react-native-size-matters';
-import {BG_COLOR} from '../../utils/Colors';
-import CustomTextInput from '../../common/CustomTextInput'; // Assume this component already exists
 import CustomBorderBtn from '../../common/CustomBorderBtn'; // Assume this component already exists
 import CustomSolidBtn from '../../common/CustomSolidBtn'; // Assume this component already exists
-import {useNavigation} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
+import CustomTextInput from '../../common/CustomTextInput'; // Assume this component already exists
 import Loader from '../../common/Loader';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BG_COLOR} from '../../utils/Colors';
 
 const LoginForCompany = () => {
   const navigation = useNavigation();
@@ -91,6 +91,7 @@ const LoginForCompany = () => {
     await AsyncStorage.setItem('NAME', name);
     await AsyncStorage.setItem('EMAIL', email);
     await AsyncStorage.setItem('USER_ID', id);
+    await AsyncStorage.setItem('USER_TYPE', 'company');
     navigation.navigate('DashboardForCompany');
   };
   return (

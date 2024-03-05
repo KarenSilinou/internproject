@@ -53,10 +53,18 @@ const Home = () => {
         <Text style={styles.note}>{'Disctuter avec des entreprises'}</Text>
       </View>
       <View style={styles.btnsView}>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() => {
+            navigation.navigate('LoginForUser');
+          }}>
           <Text style={[styles.btnText, {color: BG_COLOR}]}>Se Connecter</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.signUpBtn}>
+        <TouchableOpacity
+          style={styles.signUpBtn}
+          onPress={() => {
+            navigation.navigate('SignUpForUser');
+          }}>
           <Text style={styles.btnText}>S'inscrire</Text>
         </TouchableOpacity>
       </View>
