@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginLeft: moderateScale(10),
   },
   sub_heading: {
-    fontSize: moderateScale(8.5),
+    fontSize: moderateScale(13),
     width: '60%',
     marginLeft: moderateScale(10),
     marginTop: moderateScale(4),
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText: {
-    fontWeight: '500',
-    fontSize: moderateScale(10),
+    fontWeight: '700',
+    fontSize: moderateScale(14),
   },
   separator: {
     width: '90%',
