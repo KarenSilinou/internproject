@@ -1,13 +1,13 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {BG_COLOR, TEXT_BLUE1, TEXT_COLOR} from '../../utils/Colors';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
   verticalScale,
 } from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
+import {BG_COLOR, TEXT_BLUE1, TEXT_COLOR} from '../../utils/Colors';
 
 const SelectUser = () => {
   const navigation = useNavigation();
@@ -20,7 +20,9 @@ const SelectUser = () => {
         onPress={() => {
           navigation.navigate('InternPostingNavigator');
         }}>
-        <Text style={styles.btnTxt1}>Poster une offre de stage</Text>
+        <Text style={[styles.btnTxt1, {color: BG_COLOR}]}>
+          Poster une offre de stage
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.wantToIntern}

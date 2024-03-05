@@ -1,16 +1,15 @@
-import {View, Text} from 'react-native';
-import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import InternPostingNavigator from './InternPostingNavigator';
-import InternSearchingNavigator from './InternSearchingNavigator';
 import {createStackNavigator} from '@react-navigation/stack';
-import SelectUser from '../screens/onboarding/SelectUser';
-import Splash from '../screens/onboarding/Splash';
+import React from 'react';
+import ChangeProfilePicForCompany from '../screens/internposting/ChangeProfilePicForCompany';
 import DashboardForCompany from '../screens/internposting/DashboardForCompany';
+import UpdateProfileForCompany from '../screens/internposting/UpdateProfileForCompany';
 import AddIntern from '../screens/internposting/tabs/AddIntern';
 import EditIntern from '../screens/internposting/tabs/EditIntern';
-import UpdateProfileForCompany from '../screens/internposting/UpdateProfileForCompany';
-import ChangeProfilePicForCompany from '../screens/internposting/ChangeProfilePicForCompany';
+import SelectUser from '../screens/onboarding/SelectUser';
+import Splash from '../screens/onboarding/Splash';
+import InternPostingNavigator from './InternPostingNavigator';
+import InternSearchingNavigator from './InternSearchingNavigator';
 
 const STACK = createStackNavigator();
 const MainNavigator = () => {

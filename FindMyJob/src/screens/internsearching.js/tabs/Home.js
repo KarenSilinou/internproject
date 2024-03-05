@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   Image,
@@ -17,9 +18,15 @@ import CustomSolidBtn from '../../../common/CustomSolidBtn';
 import {BG_COLOR, TEXT_BLUE, TEXT_BLUE1} from '../../../utils/Colors';
 
 const Home = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={1} style={styles.searchBox}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.searchBox}
+        onPress={() => {
+          navigation.navigate('SearchIntern');
+        }}>
         <Image
           source={require('../../../images/search.png')}
           style={styles.icon}
