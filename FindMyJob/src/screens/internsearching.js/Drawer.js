@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {moderateScale, scale} from 'react-native-size-matters';
+import {scale, verticalScale} from 'react-native-size-matters';
 import {BG_COLOR} from '../../utils/Colors';
 import Applies from './tabs/Applies';
 import Home from './tabs/Home';
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   bottomNavView: {
     width: '100%',
-    height: moderateScale(80),
+    height: verticalScale(80),
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',

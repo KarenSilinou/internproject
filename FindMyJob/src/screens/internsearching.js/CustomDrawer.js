@@ -41,14 +41,22 @@ const CustomDrawer = () => {
       </View>
       <View style={styles.separator}></View>
       <FlatList
-        data={[{title: 'Evaluez-nous', icon: require('../../images/rate.png')}]}
+        contentContainerStyle={{marginTop: moderateScale(50)}}
+        data={[
+          {title: 'Evaluez-nous', icon: require('../../images/rate.png')},
+          {title: 'Theme', icon: require('../../images/theme.png')},
+        ]}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity style={styles.menuItem}>
               <View style={styles.menuItemLeftView}>
                 <Image source={item.icon} style={styles.menuItemIcon} />
-                <Text>{item.title}</Text>
+                <Text style={styles.heading}>{item.title}</Text>
               </View>
+              <Image
+                source={require('../../images/right.png')}
+                style={styles.menuItemIcon}
+              />
             </TouchableOpacity>
           );
         }}
@@ -123,6 +131,7 @@ const styles = StyleSheet.create({
   menuItem: {
     width: '90%',
     alignSelf: 'center',
+    height: verticalScale(40),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
