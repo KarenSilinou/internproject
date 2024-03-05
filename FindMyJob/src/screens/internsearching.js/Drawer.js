@@ -30,8 +30,8 @@ const DrawerScreen = () => {
           <Image
             source={
               currentTab == 0
-                ? require('../../images/home.png')
-                : require('../../images/home1.png')
+                ? require('../../images/home1.png')
+                : require('../../images/home.png')
             }
             style={styles.tabIcon}
           />
@@ -44,8 +44,8 @@ const DrawerScreen = () => {
           <Image
             source={
               currentTab == 1
-                ? require('../../images/send.png')
-                : require('../../images/send1.png')
+                ? require('../../images/send1.png')
+                : require('../../images/send.png')
             }
             style={styles.tabIcon}
           />
