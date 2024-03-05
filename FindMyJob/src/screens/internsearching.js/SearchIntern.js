@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   FlatList,
@@ -15,6 +16,7 @@ import {BG_COLOR, TEXT_COLOR} from '../../utils/Colors';
 const SearchIntern = () => {
   const [search, setSearch] = useState('');
   const [interns, setInterns] = useState([]);
+  const navigation = useNavigation();
 
   const searchIntern = txt => {
     firestore()
@@ -65,15 +67,30 @@ const SearchIntern = () => {
         renderItem={({item, index}) => {
           console.log(item);
           return (
-            <View style={styles.internItem}>
-              <Text style={styles.internTitle}>{item.internTitle}</Text>
+            <TouchableOpacity
+              style={styles.internItem}
+              onPress={() => {
+                navigation.navigate('InternDetails', {
+                  data: item,
+                });
+              }}>
+              <View style={styles.topView}>
+                <Text style={styles.internTitle}>{item.internTitle}</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require('../../images/star.png')}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
+
               <Text style={styles.subTitle}>
                 {'Categorie: ' + item.category}
               </Text>
               <Text style={styles.subTitle}>
                 {'Poster par: ' + item.posterName}
               </Text>
-            </View>
+            </TouchableOpacity>
           );
         }}
       />
@@ -125,10 +142,17 @@ const styles = StyleSheet.create({
   internTitle: {
     fontSize: moderateScale(22),
     fontWeight: '600',
-    width: '100%',
+    width: '90%',
   },
   subTitle: {
     fontSize: moderateScale(16),
     fontWeight: '500',
+    color: '#2e2e2e',
+    marginTop: moderateScale(5),
+  },
+  topView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
   },
 });
