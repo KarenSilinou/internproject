@@ -17,41 +17,32 @@ import {BG_COLOR} from '../../utils/Colors';
 
 const LoginForCompany = () => {
   const navigation = useNavigation();
-
   const [email, setEmail] = useState('');
   const [badEmail, setBadEmail] = useState('');
-
   const [password, setPassword] = useState('');
   const [badPassword, setBadPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
 
   const validate = () => {
     let validEmail = true;
     let validPassword = true;
-
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (email == '') {
+
+    if (email === '') {
       validEmail = false;
-      setBadEmail('Svp entrez votre email !!!');
-    } else if (email != '' && !email.toString().match(emailRegex)) {
+      setBadEmail('Veuillez entrer votre email !!!');
+    } else if (!email.match(emailRegex)) {
       validEmail = false;
-      setBadEmail('Svp entrez un email valide !!!');
-    } else if (email != '' && email.toString().match(emailRegex)) {
-      validEmail = true;
-      setBadEmail('');
+      setBadEmail('Veuillez entrer un email valide !!!');
     }
 
-    if (password == '') {
+    if (password === '') {
       validPassword = false;
-      setBadPassword('Svp entrez le mot de passe !!!');
-    } else if (password != '' && password.length < 6) {
+      setBadPassword('Veuillez entrer le mot de passe !!!');
+    } else if (password.length < 6) {
       validPassword = false;
-      setBadPassword('Svp minimum 6 caracteres !!!');
-    } else if (password != '' && password.length > 6) {
-      validPassword = true;
-      setBadPassword('');
+      setBadPassword('Minimum 6 caractères !!!');
     }
 
     return validEmail && validPassword;
@@ -63,22 +54,21 @@ const LoginForCompany = () => {
       .collection('intern_posters')
       .where('email', '==', email)
       .get()
-      .then(data => {
+      .then(snapshot => {
         setLoading(false);
-        console.log(data.docs);
-        if (data.docs.length > 0) {
-          data.docs.forEach(item => {
-            if (item.data().password == password) {
+        if (snapshot.empty) {
+          setBadEmail('Aucun utilisateur avec cet email');
+        } else {
+          snapshot.forEach(doc => {
+            const user = doc.data();
+            if (user.password === password) {
               setBadEmail('');
               setBadPassword('');
-              goToNextScreen(item.id, item.data().email, item.data().name);
+              goToNextScreen(doc.id, user.email, user.name);
             } else {
               setBadPassword('Mot de passe incorrecte !!!');
             }
           });
-        } else {
-          setBadEmail('Aucun utilisateur avec cet email');
-          //setBadPassword('Mot de passe incorrect !!!');
         }
       })
       .catch(error => {
@@ -94,33 +84,30 @@ const LoginForCompany = () => {
     await AsyncStorage.setItem('USER_TYPE', 'company');
     navigation.navigate('DashboardForCompany');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image source={require('../../images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Connexion</Text>
       <CustomTextInput
         value={email}
-        onChangeText={txt => {
-          setEmail(txt);
-        }}
+        onChangeText={setEmail}
         title={'Email'}
-        bad={badEmail != '' ? true : false}
+        bad={badEmail !== ''}
         placeholder={'ex: kamga@gmail.com'}
         style={styles.textInput}
       />
-      {badEmail != '' && <Text style={styles.errorMsg}>{badEmail}</Text>}
+      {badEmail !== '' && <Text style={styles.errorMsg}>{badEmail}</Text>}
       <CustomTextInput
         value={password}
-        onChangeText={txt => {
-          setPassword(txt);
-        }}
+        onChangeText={setPassword}
         title={'Mot de passe'}
         placeholder={'ex: ********'}
         style={styles.textInput}
-        bad={badPassword != '' ? true : false}
+        bad={badPassword !== ''}
       />
-      {badPassword != '' && <Text style={styles.errorMsg}>{badPassword}</Text>}
-      <Text style={styles.forgotPassword}>Mot de passe oublier ?</Text>
+      {badPassword !== '' && <Text style={styles.errorMsg}>{badPassword}</Text>}
+      <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
       <CustomSolidBtn
         title={'Connexion'}
         onClick={() => {
@@ -131,7 +118,7 @@ const LoginForCompany = () => {
       />
       <CustomBorderBtn
         onClick={() => navigation.navigate('SignUpForCompany')}
-        title={'Creer un compte'}
+        title={'Créer un compte'}
       />
       <Loader visible={loading} />
     </SafeAreaView>
