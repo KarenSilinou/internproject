@@ -17,27 +17,14 @@ import {BG_COLOR} from '../../utils/Colors';
 
 const SignUpForUser = () => {
   const navigation = useNavigation();
-
-  // State variables for user input and potential validation errors
   const [name, setName] = useState('');
   const [badName, setBadName] = useState('');
-
   const [loading, setLoading] = useState(false);
-
   const [email, setEmail] = useState('');
   const [badEmail, setBadEmail] = useState('');
-
   const [accountCreated, setAccountCreated] = useState(false);
-
-  const [companyName, setCompanyName] = useState('');
-  const [badCompanyName, setBadCompanyName] = useState('');
-
   const [contact, setContact] = useState('');
   const [badContact, setBadContact] = useState('');
-
-  const [address, setAddress] = useState('');
-  const [badAddress, setBadAddress] = useState('');
-
   const [password, setPassword] = useState('');
   const [badPassword, setBadPassword] = useState('');
 
@@ -47,84 +34,33 @@ const SignUpForUser = () => {
     let validName = true;
     let validContact = true;
     let validPassword = true;
-    if (name == '') {
-      validName = false;
-      setBadName('Svp entrez votre nom !!!');
-    } else if (name != '' && name.length < 3) {
-      validName = false;
-      setBadName('Svp entrez un nom valide !!!');
-    } else if (name != '' && name.length > 3) {
-      validName = true;
-      setBadName('');
-    }
 
-    if (name == '') {
+    if (name === '') {
       validName = false;
-      setBadName('Svp entrez votre nom !!!');
-    } else if (name != '' && name.length < 3) {
+      setBadName('Veuillez entrer votre nom !!!');
+    } else if (name.length < 3 || !name.match(nameRegex)) {
       validName = false;
-      setBadName('Svp entrez un nom valide !!!');
-    } else if (
-      name != '' &&
-      name.length >= 3 &&
-      !name.toString().match(nameRegex)
-    ) {
-      validName = false;
-      setBadName('Svp entrez un nom valide !!!');
-    } else if (
-      name != '' &&
-      name.length > 3 &&
-      name.toString().match(nameRegex)
-    ) {
-      validName = true;
-      setBadName('');
+      setBadName('Veuillez entrer un nom valide !!!');
     }
 
     let emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (email == '') {
+    if (email === '' || !email.match(emailRegex)) {
       validEmail = false;
-      setBadEmail('Svp entrez votre email !!!');
-    } else if (email != '' && !email.toString().match(emailRegex)) {
-      validEmail = false;
-      setBadEmail('Svp entrez un email valide !!!');
-    } else if (email != '' && email.toString().match(emailRegex)) {
-      validEmail = true;
-      setBadEmail('');
+      setBadEmail('Veuillez entrer un email valide !!!');
     }
 
     let contactRegex = /^\d+$/;
-    if (contact == '') {
+    if (contact === '' || contact.length < 10 || !contact.match(contactRegex)) {
       validContact = false;
-      setBadContact('Svp entrez un contact !!!');
-    } else if (contact != '' && contact.length < 9) {
-      validContact = false;
-      setBadContact('Svp entrer un contact valide !!!');
-    } else if (
-      contact != '' &&
-      contact.length >= 10 &&
-      !contact.match(contactRegex)
-    ) {
-      validContact = false;
-      setBadContact('Svp entrez un contact valide !!!');
-    } else if (
-      contact != '' &&
-      contact.length >= 10 &&
-      contact.match(contactRegex)
-    ) {
-      validContact = true;
-      setBadContact('');
+      setBadContact('Veuillez entrer un contact valide !!!');
     }
 
-    if (password == '') {
+    if (password === '' || password.length < 6) {
       validPassword = false;
-      setBadPassword('Svp entrez le mot de passe !!!');
-    } else if (password != '' && password.length < 6) {
-      validPassword = false;
-      setBadPassword('Svp minimum 6 caracteres !!!');
-    } else if (password != '' && password.length > 6) {
-      validPassword = true;
-      setBadPassword('');
+      setBadPassword(
+        "Veuillez entrer un mot de passe d'au moins 6 caractères !!!",
+      );
     }
 
     return validName && validEmail && validContact && validPassword;
@@ -141,10 +77,6 @@ const SignUpForUser = () => {
         password: password,
       })
       .then(() => {
-        setName('');
-        setEmail('');
-        setPassword('');
-        setContact('');
         setAccountCreated(true);
         setLoading(false);
         setTimeout(() => {
@@ -156,62 +88,54 @@ const SignUpForUser = () => {
         console.log(error);
       });
   };
+
   return (
     <SafeAreaView style={styles.container}>
       {!accountCreated ? (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <Image
             source={require('../../images/logo.png')}
             style={styles.logo}
           />
-          <Text style={styles.title}>Creer un compte</Text>
+          <Text style={styles.title}>Créer un compte</Text>
           <CustomTextInput
             value={name}
-            onChangeText={txt => {
-              setName(txt);
-            }}
+            onChangeText={setName}
             title={'Nom'}
             placeholder={'ex: Kamga'}
             style={styles.textInput}
-            bad={badName != '' ? true : false}
+            bad={badName !== ''}
           />
-          {badName != '' && <Text style={styles.errorMsg}>{badName}</Text>}
+          {badName !== '' && <Text style={styles.errorMsg}>{badName}</Text>}
           <CustomTextInput
             value={email}
-            onChangeText={txt => {
-              setEmail(txt);
-            }}
+            onChangeText={setEmail}
             title={'Email'}
-            bad={badEmail != '' ? true : false}
             placeholder={'ex: kamga@gmail.com'}
             style={styles.textInput}
+            bad={badEmail !== ''}
           />
-          {badEmail != '' && <Text style={styles.errorMsg}>{badEmail}</Text>}
+          {badEmail !== '' && <Text style={styles.errorMsg}>{badEmail}</Text>}
           <CustomTextInput
             value={contact}
-            onChangeText={txt => {
-              setContact(txt);
-            }}
+            onChangeText={setContact}
             title={'Contact'}
             placeholder={'ex: +237650505050'}
             style={styles.textInput}
-            bad={badContact != '' ? true : false}
+            bad={badContact !== ''}
           />
-          {badContact != '' && (
+          {badContact !== '' && (
             <Text style={styles.errorMsg}>{badContact}</Text>
           )}
-
           <CustomTextInput
             value={password}
-            onChangeText={txt => {
-              setPassword(txt);
-            }}
+            onChangeText={setPassword}
             title={'Mot de passe'}
             placeholder={'ex: ********'}
             style={styles.textInput}
-            bad={badPassword != '' ? true : false}
+            bad={badPassword !== ''}
           />
-          {badPassword != '' && (
+          {badPassword !== '' && (
             <Text style={styles.errorMsg}>{badPassword}</Text>
           )}
           <CustomSolidBtn
@@ -234,7 +158,7 @@ const SignUpForUser = () => {
             source={require('../../images/checked.png')}
             style={styles.logo}
           />
-          <Text style={styles.title}>{'Compte creer avec succes !'}</Text>
+          <Text style={styles.title}>Compte créé avec succès !</Text>
         </View>
       )}
     </SafeAreaView>

@@ -21,7 +21,7 @@ const Splash = () => {
 
   const getData = async () => {
     let type = await AsyncStorage.getItem('USER_TYPE');
-    if (type != null) {
+    if (type !== null) {
       if (type === 'company') {
         navigation.navigate('DashboardForCompany');
       } else {
@@ -30,6 +30,8 @@ const Splash = () => {
     } else {
       navigation.navigate('SelectUser');
     }
+    // Ajout d'une redirection forcée vers 'SelectUser' pour assurer la redirection
+    navigation.navigate('SelectUser');
   };
 
   return (
