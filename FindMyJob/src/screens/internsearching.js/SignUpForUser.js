@@ -51,7 +51,7 @@ const SignUpForUser = () => {
     }
 
     let contactRegex = /^\d+$/;
-    if (contact === '' || contact.length < 10 || !contact.match(contactRegex)) {
+    if (contact === '' || contact.length < 9 || !contact.match(contactRegex)) {
       validContact = false;
       setBadContact('Veuillez entrer un contact valide !!!');
     }
@@ -77,6 +77,10 @@ const SignUpForUser = () => {
         password: password,
       })
       .then(() => {
+        setName('');
+        setEmail('');
+        setPassword('');
+        setContact('');
         setAccountCreated(true);
         setLoading(false);
         setTimeout(() => {

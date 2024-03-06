@@ -25,7 +25,7 @@ const Splash = () => {
       if (type === 'company') {
         navigation.navigate('DashboardForCompany');
       } else {
-        navigation.navigate('Main');
+        navigation.navigate('InternSearchingNavigator');
       }
     } else {
       navigation.navigate('SelectUser');

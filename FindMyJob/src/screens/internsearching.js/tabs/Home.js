@@ -48,41 +48,48 @@ const Home = () => {
         />
         <Text style={styles.placeholder}>Rechercher votre stage ici...</Text>
       </TouchableOpacity>
-      <Text style={styles.heading}>
-        {"Vous n'êtes plus qu'à un pas de décrocher un bon stage"}
-      </Text>
-      <View style={styles.notes}>
-        <Image
-          source={require('../../../images/star.png')}
-          style={styles.icon}
-        />
-        <Text style={styles.note}>
-          {"Postuler à des stages après la création d'un compte"}
-        </Text>
-      </View>
-      <View style={styles.notes}>
-        <Image
-          source={require('../../../images/star.png')}
-          style={styles.icon}
-        />
-        <Text style={styles.note}>{'Disctuter avec des entreprises'}</Text>
-      </View>
-      <View style={styles.btnsView}>
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => {
-            navigation.navigate('LoginForUser');
-          }}>
-          <Text style={[styles.btnText, {color: BG_COLOR}]}>Se Connecter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signUpBtn}
-          onPress={() => {
-            navigation.navigate('SignUpForUser');
-          }}>
-          <Text style={styles.btnText}>S'inscrire</Text>
-        </TouchableOpacity>
-      </View>
+      {!isLogin && (
+        <View>
+          <Text style={styles.heading}>
+            {"Vous n'êtes plus qu'à un pas de décrocher un bon stage"}
+          </Text>
+          <View style={styles.notes}>
+            <Image
+              source={require('../../../images/star.png')}
+              style={styles.icon}
+            />
+            <Text style={styles.note}>
+              {"Postuler à des stages après la création d'un compte"}
+            </Text>
+          </View>
+          <View style={styles.notes}>
+            <Image
+              source={require('../../../images/star.png')}
+              style={styles.icon}
+            />
+            <Text style={styles.note}>{'Disctuter avec des entreprises'}</Text>
+          </View>
+          <View style={styles.btnsView}>
+            <TouchableOpacity
+              style={styles.loginBtn}
+              onPress={() => {
+                navigation.navigate('LoginForUser');
+              }}>
+              <Text style={[styles.btnText, {color: BG_COLOR}]}>
+                Se Connecter
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.signUpBtn}
+              onPress={() => {
+                navigation.navigate('SignUpForUser');
+              }}>
+              <Text style={styles.btnText}>S'inscrire</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
       <View style={styles.internSearchCard}>
         <Image
           source={require('../../../images/searchanim.gif')}
