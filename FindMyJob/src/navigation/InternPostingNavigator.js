@@ -12,25 +12,25 @@ const InternPostingNavigator = () => {
       <STACK.Screen
         name="LoginForCompany"
         component={LoginForCompany}
-        options={{headerShown: false, headerTintColor: TEXT_BLUE}}
+        options={{headerShown: false}}
       />
 
       <STACK.Screen
         name="SignUpForCompany"
         component={SignUpForCompany}
-        options={{headerShown: false, headerTintColor: TEXT_BLUE}}
+        options={{headerShown: false}}
       />
 
       <STACK.Screen
         name="DashboardForCompany"
         component={DashboardForCompany}
-        options={{headerShown: false, headerTintColor: TEXT_BLUE}}
+        options={{headerShown: false}}
       />
 
       <STACK.Screen
         name="AddIntern"
         component={AddIntern}
-        options={{headerShown: false, headerTintColor: TEXT_BLUE}}
+        options={{headerShown: false}}
       />
     </STACK.Navigator>
   );

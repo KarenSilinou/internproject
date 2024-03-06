@@ -46,8 +46,6 @@ const SignUpForUser = () => {
     let validEmail = true;
     let validName = true;
     let validContact = true;
-    let validCompany = true;
-    let validAddress = true;
     let validPassword = true;
     if (name == '') {
       validName = false;
@@ -129,14 +127,7 @@ const SignUpForUser = () => {
       setBadPassword('');
     }
 
-    return (
-      validName &&
-      validEmail &&
-      validContact &&
-      validCompany &&
-      validAddress &&
-      validPassword
-    );
+    return validName && validEmail && validContact && validPassword;
   };
 
   const registerUser = () => {
@@ -144,10 +135,10 @@ const SignUpForUser = () => {
     firestore()
       .collection('users')
       .add({
-        name,
-        email,
-        contact,
-        password,
+        name: name,
+        email: email,
+        contact: contact,
+        password: password,
       })
       .then(() => {
         setName('');

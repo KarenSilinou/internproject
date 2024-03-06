@@ -1,23 +1,24 @@
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
-import {moderateScale, verticalScale} from 'react-native-size-matters';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import {moderateScale, verticalScale} from 'react-native-size-matters';
+import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 const MyInterns = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const [interns, setInterns] = useState([
-    useEffect(() => {
+  const [interns, setInterns] = useState([]);
+  useEffect(() => {
+    if (isFocused) {
       getIntern();
-    }, [isFocused]),
-  ]);
+    }
+  }, [isFocused]);
   const getIntern = async () => {
     setLoading(true);
     let id = await AsyncStorage.getItem('USER_ID');
@@ -76,35 +77,35 @@ const MyInterns = () => {
         <FlatList
           data={interns}
           renderItem={({item, index}) => {
-            // return (
-            //   <View style={styles.internItem} keys={index}>
-            //     <Text style={styles.title}>{item.internTitle}</Text>
-            //     <Text style={styles.desc}>{item.internDesc}</Text>
-            //     <Text style={styles.duree}>
-            //       {'Categorie: ' + item.category + ''}
-            //     </Text>
-            //     <Text style={styles.duree}>
-            //       {'Duree: ' + item.internTime + ' Mois'}
-            //     </Text>
-            //     <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
-            //     <View style={styles.bottomView}>
-            //       <TouchableOpacity
-            //         style={styles.editBtn}
-            //         onPress={() => {
-            //           navigation.navigate('EditIntern', {data: item});
-            //         }}>
-            //         <Text>Modifier l'offre</Text>
-            //       </TouchableOpacity>
-            //       <TouchableOpacity
-            //         style={styles.deleteBtn}
-            //         onPress={() => {
-            //           deleteIntern(item.id);
-            //         }}>
-            //         <Text style={{color: 'red'}}>Supprimer l'offre</Text>
-            //       </TouchableOpacity>
-            //     </View>
-            //   </View>
-            // );
+            return (
+              <View style={styles.internItem} key={index}>
+                <Text style={styles.title}>{item.internTitle}</Text>
+                <Text style={styles.desc}>{item.internDesc}</Text>
+                <Text style={styles.duree}>
+                  {'Categorie: ' + item.category + ''}
+                </Text>
+                <Text style={styles.duree}>
+                  {'Duree: ' + item.internTime + ' Mois'}
+                </Text>
+                <Text style={styles.duree}>{'Competence: ' + item.skill}</Text>
+                <View style={styles.bottomView}>
+                  <TouchableOpacity
+                    style={styles.editBtn}
+                    onPress={() => {
+                      navigation.navigate('EditIntern', {data: item});
+                    }}>
+                    <Text>Modifier l'offre</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.deleteBtn}
+                    onPress={() => {
+                      deleteIntern(item.id);
+                    }}>
+                    <Text style={{color: 'red'}}>Supprimer l'offre</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
           }}
         />
       ) : (

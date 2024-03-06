@@ -1,19 +1,19 @@
-import {View, Text, StyleSheet, Image, Alert} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
 } from 'react-native-size-matters';
-import {BG_COLOR} from '../../utils/Colors';
-import CustomTextInput from '../../common/CustomTextInput'; // Assume this component already exists
 import CustomBorderBtn from '../../common/CustomBorderBtn'; // Assume this component already exists
 import CustomSolidBtn from '../../common/CustomSolidBtn'; // Assume this component already exists
-import {useNavigation} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
+import CustomTextInput from '../../common/CustomTextInput'; // Assume this component already exists
 import Loader from '../../common/Loader';
-import firestore from '@react-native-firebase/firestore';
+import {BG_COLOR} from '../../utils/Colors';
 
 const SignUpForCompany = () => {
   const navigation = useNavigation();
@@ -156,6 +156,7 @@ const SignUpForCompany = () => {
   };
 
   const registerUser = () => {
+    setLoading(true);
     firestore()
       .collection('intern_posters')
       .add({

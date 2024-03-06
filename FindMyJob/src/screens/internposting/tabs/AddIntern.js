@@ -1,40 +1,39 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Touchable,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-  FlatList,
-} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {BG_COLOR} from '../../../utils/Colors';
+import {
+  FlatList,
+  Image,
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
-import CustomTextInput from '../../../common/CustomTextInput';
 import CustomDropDown from '../../../common/CustomDropDown';
 import CustomSolidBtn from '../../../common/CustomSolidBtn';
-import {useNavigation} from '@react-navigation/native';
-import {profiles} from '../../../utils/Profiles';
-import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomTextInput from '../../../common/CustomTextInput';
 import Loader from '../../../common/Loader';
+import {BG_COLOR} from '../../../utils/Colors';
+import {profiles} from '../../../utils/Profiles';
 
 const AddIntern = () => {
-  const [internTitle, setInternTiltle] = useState('');
+  const [internTitle, setInternTitle] = useState('');
   const [badInternTitle, setBadInternTitle] = useState('');
   const [internDesc, setInternDesc] = useState('');
   const [badInternDesc, setBadInternDesc] = useState('');
   const [company, setCompany] = useState('');
-  const [badcompany, setBadCompany] = useState('');
-  const [companyAddress, setCompanyAdress] = useState('');
+  const [badCompany, setBadCompany] = useState('');
+  const [companyAddress, setCompanyAddress] = useState('');
   const [badCompanyAddress, setBadCompanyAddress] = useState('');
   const [internTime, setInternTime] = useState('');
   const [badInternTime, setBadInternTime] = useState('');
   const navigation = useNavigation();
-  const [openCategoryModal, setCategoryModal] = useState(false);
-  const [openSkillModal, setSkillModal] = useState(false);
+  const [openCategoryModal, setOpenCategoryModal] = useState(false);
+  const [openSkillModal, setOpenSkillModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Selected category');
   const [badInternCategory, setBadInternCategory] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('Selected skill');
@@ -51,9 +50,9 @@ const AddIntern = () => {
         postedBy: id,
         posterName: name,
         internTitle: internTitle,
-        internDesc,
-        company,
-        internTime,
+        internDesc: internDesc,
+        company: company,
+        internTime: internTime,
         skill: selectedSkill,
         category: profiles[selectedCategory].category,
       })
@@ -76,62 +75,52 @@ const AddIntern = () => {
     let validInternTime = true;
     let validCompanyAddress = true;
 
-    if (internTitle == '') {
+    if (internTitle === '') {
       validInternTitle = false;
       setBadInternTitle("Svp entrez le titre de l'offre");
-    } else if (internTitle != '') {
-      validInternTitle = true;
+    } else {
       setBadInternTitle('');
     }
 
-    if (internDesc == '') {
+    if (internDesc === '' || internDesc.length < 10) {
       validInternDesc = false;
-      setBadInternDesc("Svp entrez la description de l'offre");
-    } else if (internDesc != '' && internDesc.length < 10) {
-      validInternDesc = false;
-      setBadInternDesc("Svp entrez une description d'au moins 10 caracteres");
-    } else if (internDesc != '' && internDesc.length >= 10) {
-      validInternDesc = true;
+      setBadInternDesc("Svp entrez une description d'au moins 10 caractères");
+    } else {
       setBadInternDesc('');
     }
 
-    if (selectedCategory == 'Select category') {
+    if (selectedCategory === 'Selected category') {
       validCategory = false;
       setBadInternCategory("Svp entrez la categorie de l'offre");
-    } else if (selectedCategory == 'Select category') {
-      validCategory = true;
+    } else {
       setBadInternCategory('');
     }
 
-    if (selectedSkill == 'Select skill') {
-      validCategory = false;
-      setBadInternSkill('Svp entrez la competence');
-    } else if (selectedSkill == 'Select skill') {
-      validSkill = true;
+    if (selectedSkill === 'Selected skill') {
+      validSkill = false;
+      setBadInternSkill('Svp entrez la compétence');
+    } else {
       setBadInternSkill('');
     }
 
-    if (setCompany == '') {
+    if (company === '') {
       validCompany = false;
       setBadCompany('Svp entrez la compagnie');
-    } else if (setCompany == '') {
-      validSkill = true;
+    } else {
       setBadCompany('');
     }
 
-    if (internTime == '') {
+    if (internTime === '') {
       validInternTime = false;
-      setBadInternTime("Svp entrez la periode de l'offre");
-    } else if (internTitle != '') {
-      validInternTime = true;
+      setBadInternTime("Svp entrez la période de l'offre");
+    } else {
       setBadInternTime('');
     }
 
-    if (companyAddress == '') {
+    if (companyAddress === '') {
       validCompanyAddress = false;
       setBadCompanyAddress("Svp entrez l'adresse de l'entreprise");
-    } else if (companyAddress != '') {
-      validCompanyAddress = true;
+    } else {
       setBadCompanyAddress('');
     }
 
@@ -162,7 +151,7 @@ const AddIntern = () => {
       <CustomTextInput
         value={internTitle}
         onChangeText={txt => {
-          setInternTiltle(txt);
+          setInternTitle(txt);
         }}
         title={'Libelle du stage'}
         bad={badInternTitle != '' ? true : false}
@@ -185,7 +174,7 @@ const AddIntern = () => {
             : profiles[selectedCategory].category
         }
         onClick={() => {
-          setCategoryModal(true);
+          setOpenCategoryModal(true);
         }}
       />
       {badInternCategory != '' && (
@@ -200,7 +189,7 @@ const AddIntern = () => {
         bad={badInternSkill != '' ? true : false}
         placeholder={selectedSkill}
         onClick={() => {
-          setSkillModal(true);
+          setOpenSkillModal(true);
         }}
       />
       {badInternSkill != '' && (
