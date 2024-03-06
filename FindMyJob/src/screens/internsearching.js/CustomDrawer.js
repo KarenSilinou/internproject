@@ -36,7 +36,7 @@ const CustomDrawer = () => {
       const mEmail = await AsyncStorage.getItem('EMAIL');
 
       // Vérifie si toutes les données nécessaires sont disponibles
-      if (id && type === 'user' && mName && mEmail) {
+      if (id && type == 'user' && mName && mEmail) {
         setIsLogin(true);
         setName(mName);
         setEmail(mEmail);
