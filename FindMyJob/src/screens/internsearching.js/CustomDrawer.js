@@ -1,4 +1,6 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -17,6 +19,36 @@ import {
 import {BG_COLOR, TEXT_BLUE1} from '../../utils/Colors';
 
 const CustomDrawer = () => {
+  const isFocused = useIsFocused();
+  const [isLogin, setIsLogin] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    getData();
+  }, [isFocused]);
+
+  const getData = async () => {
+    try {
+      const id = await AsyncStorage.getItem('USER_ID');
+      const type = await AsyncStorage.getItem('USER_TYPE');
+      const mName = await AsyncStorage.getItem('NAME');
+      const mEmail = await AsyncStorage.getItem('EMAIL');
+
+      // Vérifie si toutes les données nécessaires sont disponibles
+      if (id && type === 'user' && mName && mEmail) {
+        setIsLogin(true);
+        setName(mName);
+        setEmail(mEmail);
+      } else {
+        setIsLogin(false); // Assure que isLogin est false si l'une des données est manquante
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+      setIsLogin(false); // Gérer les erreurs en mettant isLogin à false
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
@@ -25,26 +57,33 @@ const CustomDrawer = () => {
           style={styles.profile}
         />
         <View>
-          <Text style={styles.heading}>Creer votre profil</Text>
-          <Text style={styles.sub_heading}>
-            Le stage n'attend que vous sur INTERNGLOBE !
+          <Text style={styles.heading}>
+            {isLogin ? name : 'Créer votre profil'}
+          </Text>
+          <Text style={[styles.sub_heading, {width: isLogin ? '100%' : '60%'}]}>
+            {isLogin ? email : "Le stage n'attend que vous sur INTERNGLOBE !"}
           </Text>
         </View>
       </View>
-      <View style={styles.btnsView}>
-        <TouchableOpacity style={styles.loginBtn}>
-          <Text style={[styles.btnText, {color: BG_COLOR}]}>Se Connecter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.signUpBtn}>
-          <Text style={styles.btnText}>S'inscrire</Text>
-        </TouchableOpacity>
-      </View>
+      {!isLogin && (
+        <View style={styles.btnsView}>
+          <TouchableOpacity style={styles.loginBtn}>
+            <Text style={[styles.btnText, {color: BG_COLOR}]}>
+              Se Connecter
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.signUpBtn}>
+            <Text style={styles.btnText}>S'inscrire</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <View style={styles.separator}></View>
       <FlatList
         contentContainerStyle={{marginTop: moderateScale(50)}}
         data={[
-          {title: 'Evaluez-nous', icon: require('../../images/rate.png')},
-          {title: 'Theme', icon: require('../../images/theme.png')},
+          {title: 'Évaluez-nous', icon: require('../../images/rate.png')},
+          {title: 'Thème', icon: require('../../images/theme.png')},
         ]}
         renderItem={({item, index}) => {
           return (
@@ -66,6 +105,7 @@ const CustomDrawer = () => {
 };
 
 export default CustomDrawer;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
