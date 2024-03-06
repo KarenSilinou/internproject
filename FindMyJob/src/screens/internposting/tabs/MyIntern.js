@@ -184,25 +184,27 @@ const styles = StyleSheet.create({
   },
   loaderView: {
     width: '90%',
-    height: moderateScale(150),
     alignSelf: 'center',
     marginTop: moderateScale(20),
+    backgroundColor: '#f2f2f2',
+    borderRadius: moderateScale(20),
+    padding: moderateScale(15),
   },
   loaderTitle: {
-    width: '70%',
+    width: '100%',
     height: verticalScale(20),
     borderRadius: moderateScale(10),
-    marginTop: moderateScale(10),
+    marginVertical: moderateScale(5),
   },
   loaderBottomView: {
-    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     marginTop: moderateScale(10),
   },
   loaderBtn: {
-    width: '46%',
+    width: '45%',
     height: verticalScale(30),
     borderRadius: moderateScale(10),
+    marginVertical: moderateScale(5),
   },
 });
