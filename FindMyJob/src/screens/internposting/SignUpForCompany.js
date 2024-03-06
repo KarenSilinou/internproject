@@ -104,7 +104,7 @@ const SignUpForCompany = () => {
       setBadContact('Svp entrer un contact valide !!!');
     } else if (
       contact != '' &&
-      contact.length >= 10 &&
+      contact.length >= 9 &&
       !contact.match(contactRegex)
     ) {
       validContact = false;
