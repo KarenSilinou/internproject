@@ -24,10 +24,6 @@ const CustomDrawer = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    getData();
-  }, [isFocused]);
-
   const getData = async () => {
     try {
       const id = await AsyncStorage.getItem('USER_ID');
@@ -35,19 +31,22 @@ const CustomDrawer = () => {
       const mName = await AsyncStorage.getItem('NAME');
       const mEmail = await AsyncStorage.getItem('EMAIL');
 
-      // Vérifie si toutes les données nécessaires sont disponibles
-      if (id && type == 'user' && mName && mEmail) {
+      if (id && type === 'user' && mName && mEmail) {
         setIsLogin(true);
         setName(mName);
         setEmail(mEmail);
       } else {
-        setIsLogin(false); // Assure que isLogin est false si l'une des données est manquante
+        setIsLogin(false);
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des données:', error);
-      setIsLogin(false); // Gérer les erreurs en mettant isLogin à false
+      setIsLogin(false);
     }
   };
+
+  useEffect(() => {
+    getData();
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,7 +76,6 @@ const CustomDrawer = () => {
           </TouchableOpacity>
         </View>
       )}
-
       <View style={styles.separator}></View>
       <FlatList
         contentContainerStyle={{marginTop: moderateScale(50)}}
@@ -105,7 +103,6 @@ const CustomDrawer = () => {
 };
 
 export default CustomDrawer;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
