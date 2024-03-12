@@ -201,15 +201,15 @@ const AddIntern = () => {
           setCompany(txt);
         }}
         title={'Entreprise'}
-        bad={badcompany != '' ? true : false}
+        bad={badCompany != '' ? true : false}
         placeholder={'ex Google'}
         style={styles.textInput}
       />
-      {badcompany != '' && <Text style={styles.errorMsg}>{badcompany}</Text>}
+      {badCompany != '' && <Text style={styles.errorMsg}>{badcompany}</Text>}
       <CustomTextInput
         value={companyAddress}
         onChangeText={txt => {
-          setCompanyAdress(txt);
+          setCompanyAddress(txt);
         }}
         title={"Adresse de l'entreprise"}
         bad={badCompanyAddress != '' ? true : false}
@@ -270,7 +270,7 @@ const AddIntern = () => {
                     style={styles.profileItem}
                     onPress={() => {
                       setSelectedCategory(index);
-                      setCategoryModal(false);
+                      setOpenCategoryModal(false);
                     }}>
                     <Text>{item.category}</Text>
                   </TouchableOpacity>
@@ -299,7 +299,7 @@ const AddIntern = () => {
                     style={styles.profileItem}
                     onPress={() => {
                       setSelectedSkill(item[0]);
-                      setSkillModal(false);
+                      setOpenSkillModal(false);
                     }}>
                     <Text>{item[0]}</Text>
                   </TouchableOpacity>
