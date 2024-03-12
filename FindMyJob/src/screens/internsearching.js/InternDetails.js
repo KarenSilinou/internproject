@@ -1,11 +1,77 @@
-import {useRoute} from '@react-navigation/native';
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused, useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {BG_COLOR, TEXT_BLUE1} from '../../utils/Colors';
 
 const InternDetails = () => {
   const route = useRoute();
+  const isFocused = useIsFocused();
+  const [isLogin, setIsLogin] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [savedInternId, setSavedInternId] = useState('');
+  const [isInternSaved, setIsInternSaved] = useState(false);
+
+  useEffect(() => {
+    getData();
+    getSavedInterns();
+  }, [isFocused]);
+
+  const getData = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    const type = await AsyncStorage.getItem('USER_TYPE');
+
+    if (id != null && type != null) {
+      if (type == 'user') {
+        setIsLogin(true);
+      }
+    }
+  };
+
+  const saveInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+
+    firestore()
+      .collection('save_interns')
+      .add({
+        ...route.params.data,
+        userId: id,
+      })
+      .then(() => {
+        console.log('intern save successfully');
+      });
+  };
+
+  const getSavedInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+
+    firestore()
+      .collection('saved_interns')
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        console.log(snapshot.docs);
+        snapshot.docs.forEach(item => {
+          if (item.data().id == route.params.data.id) {
+            setIsInternSaved(true);
+            setSavedInternId(item.id);
+          }
+        });
+      });
+  };
+
+  const removeSavedIntern = () => {
+    firestore()
+      .collection('saved_interns')
+      .doc(savedInternId)
+      .delete()
+      .then(() => {
+        getSavedInterns();
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{route.params.data.internTitle}</Text>
@@ -26,13 +92,31 @@ const InternDetails = () => {
         {'Categorie: ' + route.params.data.category}
       </Text>
       <View style={styles.bottomView}>
-        <TouchableOpacity style={styles.saveBtn}>
+        <TouchableOpacity
+          disabled={isLogin ? false : true}
+          style={styles.saveBtn}
+          onPress={() => {
+            if (isInternSaved) {
+              removeSavedIntern();
+            } else {
+              saveInterns();
+            }
+          }}>
           <Image
-            source={require('../../images/star.png')}
+            source={
+              isInternSaved
+                ? require('../../images/star1.png')
+                : require('../../images/star.png')
+            }
             style={styles.icon}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.applyBtn}>
+        <TouchableOpacity
+          disabled={isLogin ? false : true}
+          style={[
+            styles.applyBtn,
+            {backgroundColor: isLogin ? '#00B5E8' : '#9e9e9e'},
+          ]}>
           <Text style={styles.btnText}>Postuler pour le stage</Text>
         </TouchableOpacity>
       </View>
@@ -41,6 +125,7 @@ const InternDetails = () => {
 };
 
 export default InternDetails;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

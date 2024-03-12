@@ -69,6 +69,9 @@ const Profile = () => {
           </TouchableOpacity>
           <Text style={styles.name}>{userData ? userData.name : 'NA'}</Text>
           <Text style={styles.email}>{userData ? userData.email : 'NA'}</Text>
+          <TouchableOpacity style={styles.editBtn}>
+            <Text>Modifier le profil</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -101,5 +104,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginLeft: 20,
     marginTop: 5,
+  },
+  editBtn: {
+    width: 200,
+    height: 50,
+    borderWidth: 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginTop: 20,
+    marginLeft: 20,
   },
 });
