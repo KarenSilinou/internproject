@@ -28,7 +28,29 @@ const Profile = () => {
   };
 
   const getProfileData = async () => {
-    const id = await AsyncStorage.getItem('USER_ID');
+    try {
+      const id = await AsyncStorage.getItem('USER_ID');
+      // check if the user ID exist in AsyncStorage
+      if(!id) {
+        console.log('no user Id found');
+        return;
+      }
+
+      const userDoc = firestore().collection('users').doc(id);
+      const snapshot = await userDoc.get();
+
+      if(snapshot.exists) {
+        setUserData(snapshot.data());
+        console.log('Data from firestore:', snapshot.data());
+      } else {
+        console.log("document doesn't exist");
+        setUserData(null);
+      }
+    }catch (error) {
+      console.error('error fetching document:', error)
+    }
+    
+    /*const id = await AsyncStorage.getItem('USER_ID');
     console.log('ID:', id);
 
     firestore()
@@ -46,7 +68,7 @@ const Profile = () => {
       })
       .catch(error => {
         console.error('Error fetching document:', error);
-      });
+      });*/
   };
 
   return (
