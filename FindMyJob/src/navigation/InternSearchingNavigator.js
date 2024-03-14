@@ -3,6 +3,7 @@ import React from 'react';
 import InternDetails from '../screens/internsearching.js/InternDetails';
 import LoginForUser from '../screens/internsearching.js/LoginForUser';
 import Main from '../screens/internsearching.js/Main';
+import SavedInterns from '../screens/internsearching.js/SavedInterns';
 import SearchIntern from '../screens/internsearching.js/SearchIntern';
 import SignUpForUser from '../screens/internsearching.js/SignUpForUser';
 import {TEXT_BLUE} from '../utils/Colors';
@@ -15,6 +16,11 @@ const InternSearchingNavigator = () => {
         name="Main"
         component={Main}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SavedInterns"
+        component={SavedInterns}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="SearchIntern"

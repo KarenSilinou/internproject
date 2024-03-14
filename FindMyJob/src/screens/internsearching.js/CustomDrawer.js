@@ -18,8 +18,9 @@ import {
 } from 'react-native-size-matters';
 import {BG_COLOR, TEXT_BLUE1} from '../../utils/Colors';
 
-const CustomDrawer = () => {
+const CustomDrawer = ({navigation}) => {
   const isFocused = useIsFocused();
+  //const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -80,12 +81,20 @@ const CustomDrawer = () => {
       <FlatList
         contentContainerStyle={{marginTop: moderateScale(50)}}
         data={[
+          {title: 'Stage enregistrer', icon: require('../../images/star.png')},
           {title: 'Évaluez-nous', icon: require('../../images/rate.png')},
           {title: 'Thème', icon: require('../../images/theme.png')},
         ]}
         renderItem={({item, index}) => {
           return (
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                if (index == 0) {
+                  navigation.closeDrawer();
+                  navigation.navigate('SavedInterns');
+                }
+              }}>
               <View style={styles.menuItemLeftView}>
                 <Image source={item.icon} style={styles.menuItemIcon} />
                 <Text style={styles.heading}>{item.title}</Text>

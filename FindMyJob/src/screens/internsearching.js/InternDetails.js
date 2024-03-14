@@ -22,7 +22,6 @@ const InternDetails = () => {
   const getData = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     const type = await AsyncStorage.getItem('USER_TYPE');
-
     if (id != null && type != null) {
       if (type == 'user') {
         setIsLogin(true);
@@ -32,7 +31,6 @@ const InternDetails = () => {
 
   const saveInterns = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
-
     firestore()
       .collection('save_interns')
       .add({
@@ -40,25 +38,29 @@ const InternDetails = () => {
         userId: id,
       })
       .then(() => {
-        console.log('intern save successfully');
+        console.log('intern saved successfully');
+        getSavedInterns();
       });
   };
 
   const getSavedInterns = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
-
     firestore()
       .collection('saved_interns')
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
         console.log(snapshot.docs);
+        let isSaved = false;
+        let savedId = '';
         snapshot.docs.forEach(item => {
           if (item.data().id == route.params.data.id) {
-            setIsInternSaved(true);
-            setSavedInternId(item.id);
+            isSaved = true;
+            savedId = item.id;
           }
         });
+        setIsInternSaved(isSaved);
+        setSavedInternId(savedId);
       });
   };
 
@@ -86,14 +88,14 @@ const InternDetails = () => {
         {'Entreprise: ' + route.params.data.company}
       </Text>
       <Text style={styles.subTitle}>
-        {'Duree: ' + route.params.data.internTime + ' Mois'}
+        {'Durée: ' + route.params.data.internTime + ' Mois'}
       </Text>
       <Text style={styles.subTitle}>
-        {'Categorie: ' + route.params.data.category}
+        {'Catégorie: ' + route.params.data.category}
       </Text>
       <View style={styles.bottomView}>
         <TouchableOpacity
-          disabled={isLogin ? false : true}
+          disabled={!isLogin}
           style={styles.saveBtn}
           onPress={() => {
             if (isInternSaved) {
@@ -112,7 +114,7 @@ const InternDetails = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          disabled={isLogin ? false : true}
+          disabled={!isLogin}
           style={[
             styles.applyBtn,
             {backgroundColor: isLogin ? '#00B5E8' : '#9e9e9e'},
@@ -123,8 +125,6 @@ const InternDetails = () => {
     </View>
   );
 };
-
-export default InternDetails;
 
 const styles = StyleSheet.create({
   container: {
@@ -192,3 +192,5 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
 });
+
+export default InternDetails;
