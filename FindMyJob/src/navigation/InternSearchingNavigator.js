@@ -20,7 +20,11 @@ const InternSearchingNavigator = () => {
       <Stack.Screen
         name="SavedInterns"
         component={SavedInterns}
-        options={{headerShown: true}}
+        options={{
+          headerShown: true,
+          title: 'Stage enregistrer',
+          headerTintColor: TEXT_BLUE,
+        }}
       />
       <Stack.Screen
         name="SearchIntern"
