@@ -22,7 +22,7 @@ const Inbox = () => {
   };
   return (
     <View style={styles.container}>
-      {isLogin && (
+      {!isLogin && (
         <NoLoginComponent
           desc={'Discutez avec des entreprises pour avoir une recommandation'}
           heading={"Vous pouvez discuter avec l'entreprise"}
