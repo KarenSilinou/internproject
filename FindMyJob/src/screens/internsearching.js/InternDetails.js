@@ -51,16 +51,17 @@ const InternDetails = () => {
       .get()
       .then(snapshot => {
         console.log(snapshot.docs);
-        let isSaved = false;
-        let savedId = '';
-        snapshot.docs.forEach(item => {
-          if (item.data().id == route.params.data.id) {
-            isSaved = true;
-            savedId = item.id;
-          }
-        });
-        setIsInternSaved(isSaved);
-        setSavedInternId(savedId);
+        if (snapshot.docs.length > 0) {
+          snapshot.docs.forEach(item => {
+            if (item.data().id == route.params.data.id) {
+              setIsInternSaved(true);
+              setSavedInternId(item.id);
+            }
+          });
+        } else {
+          setIsInternSaved(false);
+          setSavedInternId('');
+        }
       });
   };
 

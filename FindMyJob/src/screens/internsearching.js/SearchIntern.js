@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -17,6 +17,8 @@ const SearchIntern = () => {
   const [search, setSearch] = useState('');
   const [interns, setInterns] = useState([]);
   const navigation = useNavigation();
+  const [savedInterns, setSavedIntern] = useState([]);
+  const isFocused = useIsFocused();
 
   const searchIntern = txt => {
     firestore()
@@ -27,11 +29,73 @@ const SearchIntern = () => {
         console.log(snapshot.docs);
         let temp = [];
         snapshot.docs.forEach(item => {
-          temp.push({...item.data(), id: item.id});
+          temp.push({...item.data()});
         });
         setInterns(temp);
       });
   };
+
+  useEffect(() => {
+    getSavedInterns();
+  }, [isFocused]);
+
+  const saveInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('save_interns')
+      .add({
+        ...route.params.data,
+        userId: id,
+      })
+      .then(() => {
+        console.log('intern saved successfully');
+        getSavedInterns();
+      });
+  };
+
+  const getSavedInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('saved_interns')
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        console.log(snapshot.docs);
+        if (snapshot.docs.length > 0) {
+          let temp = [];
+          snapshot.docs.forEach(item => {
+            temp.push({...item.data(), savedId: item.id});
+          });
+          setSavedIntern(temp);
+        } else {
+          setSavedIntern([]);
+        }
+      });
+  };
+
+  const removeSavedIntern = id => {
+    firestore()
+      .collection('saved_interns')
+      .doc(id)
+      .delete()
+      .then(() => {
+        searchIntern(search);
+      });
+  };
+
+  const checkSavedIntern = id => {
+    let temp = savedInterns;
+
+    let isSaved = false;
+    temp.map(item => {
+      console.log('saved item:'), item;
+      if (item.id == id) {
+        isSaved = true;
+      }
+    });
+    return isSaved;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
@@ -76,9 +140,18 @@ const SearchIntern = () => {
               }}>
               <View style={styles.topView}>
                 <Text style={styles.internTitle}>{item.internTitle}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (checkSavedIntern(item.id)) {
+                      removeSavedIntern(item.savedId);
+                    }
+                  }}>
                   <Image
-                    source={require('../../images/star.png')}
+                    source={
+                      checkSavedIntern(item.id)
+                        ? require('../../images/star1.png')
+                        : require('../../images/star.png')
+                    }
                     style={styles.icon}
                   />
                 </TouchableOpacity>

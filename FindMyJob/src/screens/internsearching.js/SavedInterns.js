@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -16,21 +17,36 @@ const SavedInterns = () => {
   const [search, setSearch] = useState('');
   const [interns, setInterns] = useState([]);
   const navigation = useNavigation();
+  useEffect(() => {
+    getInterns();
+  }, []);
 
-  const searchIntern = txt => {
+  const getInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
     firestore()
-      .collection('interns')
-      .where('internTitle', '==', txt)
+      .collection('saved_interns')
+      .where('userId', '==', id)
       .get()
       .then(snapshot => {
         console.log(snapshot.docs);
         let temp = [];
         snapshot.docs.forEach(item => {
-          temp.push({...item.data(), id: item.id});
+          temp.push({...item.data(), savedId: item.id});
         });
         setInterns(temp);
       });
   };
+
+  const removeSavedIntern = id => {
+    firestore()
+      .collection('saved_interns')
+      .doc(id)
+      .delete()
+      .then(() => {
+        getInterns();
+      });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -47,9 +63,12 @@ const SavedInterns = () => {
               }}>
               <View style={styles.topView}>
                 <Text style={styles.internTitle}>{item.internTitle}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    removeSavedIntern(item.savedId);
+                  }}>
                   <Image
-                    source={require('../../images/star.png')}
+                    source={require('../../images/star1.png')}
                     style={styles.icon}
                   />
                 </TouchableOpacity>
