@@ -12,11 +12,14 @@ const InternDetails = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [savedInternId, setSavedInternId] = useState('');
+  const [appliedInternId, setAppliedInternId] = useState('');
   const [isInternSaved, setIsInternSaved] = useState(false);
+  const [isInternApplied, setIsInternApplied] = useState(false);
 
   useEffect(() => {
     getData();
     getSavedInterns();
+    getAppliedInterns();
   }, [isFocused]);
 
   const getData = async () => {
@@ -43,6 +46,20 @@ const InternDetails = () => {
       });
   };
 
+  const applyIntern = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('applied_interns')
+      .add({
+        ...route.params.data,
+        userId: id,
+      })
+      .then(() => {
+        console.log('intern applied successfully');
+        getAppliedInterns();
+      });
+  };
+
   const getSavedInterns = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
@@ -65,6 +82,28 @@ const InternDetails = () => {
       });
   };
 
+  const getAppliedInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('applied_interns')
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        console.log(snapshot.docs);
+        if (snapshot.docs.length > 0) {
+          snapshot.docs.forEach(item => {
+            if (item.data().id == route.params.data.id) {
+              setIsInternApplied(true);
+              setAppliedInternId(item.id);
+            }
+          });
+        } else {
+          setIsInternApplied(false);
+          setAppliedInternId('');
+        }
+      });
+  };
+
   const removeSavedIntern = () => {
     firestore()
       .collection('saved_interns')
@@ -72,6 +111,16 @@ const InternDetails = () => {
       .delete()
       .then(() => {
         getSavedInterns();
+      });
+  };
+
+  const cancelApply = () => {
+    firestore()
+      .collection('applied_interns')
+      .doc(appliedInternId)
+      .delete()
+      .then(() => {
+        getAppliedInterns();
       });
   };
 
@@ -119,8 +168,17 @@ const InternDetails = () => {
           style={[
             styles.applyBtn,
             {backgroundColor: isLogin ? '#00B5E8' : '#9e9e9e'},
-          ]}>
-          <Text style={styles.btnText}>Postuler pour le stage</Text>
+          ]}
+          onPress={() => {
+            if (!isInternApplied) {
+              applyIntern();
+            } else {
+              cancelApply();
+            }
+          }}>
+          <Text style={styles.btnText}>
+            {isInternApplied ? 'Vous avez postule' : 'Postuler pour le stage'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

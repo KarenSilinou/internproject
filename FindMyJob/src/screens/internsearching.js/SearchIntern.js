@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
@@ -39,12 +40,12 @@ const SearchIntern = () => {
     getSavedInterns();
   }, [isFocused]);
 
-  const saveInterns = async () => {
+  const saveInterns = async data => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
       .collection('save_interns')
       .add({
-        ...route.params.data,
+        ...data,
         userId: id,
       })
       .then(() => {
@@ -73,13 +74,14 @@ const SearchIntern = () => {
       });
   };
 
-  const removeSavedIntern = id => {
+  const removeSavedIntern = async id => {
+    const docId = await getSavedInterns(id);
     firestore()
       .collection('saved_interns')
-      .doc(id)
+      .doc(docId)
       .delete()
       .then(() => {
-        searchIntern(search);
+        getSavedInterns();
       });
   };
 
@@ -94,6 +96,21 @@ const SearchIntern = () => {
       }
     });
     return isSaved;
+  };
+
+  const getSavedInternsId = async idd => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    let internId = '';
+    const snapshot = await firestore()
+      .collection('saved_interns')
+      .where('userId', '==', id)
+      .get();
+    snapshot.docs.forEach(item => {
+      if (idd == item.data().id) {
+        internId = item.id;
+      }
+    });
+    return internId;
   };
 
   return (
@@ -144,6 +161,8 @@ const SearchIntern = () => {
                   onPress={() => {
                     if (checkSavedIntern(item.id)) {
                       removeSavedIntern(item.savedId);
+                    } else {
+                      saveInterns(item);
                     }
                   }}>
                   <Image
