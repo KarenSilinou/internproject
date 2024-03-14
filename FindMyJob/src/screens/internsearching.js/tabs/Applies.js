@@ -70,7 +70,7 @@ const Applies = () => {
           heading={'Une place pour traquer toutes vos demandes'}
         />
       )}
-      {isLogin && (
+      {isLogin && interns.length > 0 ? (
         <FlatList
           data={interns}
           renderItem={({item, index}) => {
@@ -106,7 +106,12 @@ const Applies = () => {
             );
           }}
         />
-      )}
+      ) : null}
+      {isLogin && interns.length < 1 ? (
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>Aucun stage postuler</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -157,5 +162,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 30,
+    fontWeight: '500',
   },
 });

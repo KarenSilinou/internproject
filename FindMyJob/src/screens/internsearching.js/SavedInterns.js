@@ -49,41 +49,47 @@ const SavedInterns = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={interns}
-        renderItem={({item, index}) => {
-          console.log(item);
-          return (
-            <TouchableOpacity
-              style={styles.internItem}
-              onPress={() => {
-                navigation.navigate('InternDetails', {
-                  data: item,
-                });
-              }}>
-              <View style={styles.topView}>
-                <Text style={styles.internTitle}>{item.internTitle}</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    removeSavedIntern(item.savedId);
-                  }}>
-                  <Image
-                    source={require('../../images/star1.png')}
-                    style={styles.icon}
-                  />
-                </TouchableOpacity>
-              </View>
+      {interns.length > 0 ? (
+        <FlatList
+          data={interns}
+          renderItem={({item, index}) => {
+            console.log(item);
+            return (
+              <TouchableOpacity
+                style={styles.internItem}
+                onPress={() => {
+                  navigation.navigate('InternDetails', {
+                    data: item,
+                  });
+                }}>
+                <View style={styles.topView}>
+                  <Text style={styles.internTitle}>{item.internTitle}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      removeSavedIntern(item.savedId);
+                    }}>
+                    <Image
+                      source={require('../../images/star1.png')}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                </View>
 
-              <Text style={styles.subTitle}>
-                {'Categorie: ' + item.category}
-              </Text>
-              <Text style={styles.subTitle}>
-                {'Poster par: ' + item.posterName}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
+                <Text style={styles.subTitle}>
+                  {'Categorie: ' + item.category}
+                </Text>
+                <Text style={styles.subTitle}>
+                  {'Poster par: ' + item.posterName}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>Pas d'offre enregistrer</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -144,5 +150,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 30,
+    fontWeight: '500',
   },
 });
