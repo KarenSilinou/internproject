@@ -48,7 +48,7 @@ const Home = () => {
         />
         <Text style={styles.placeholder}>Rechercher votre stage ici...</Text>
       </TouchableOpacity>
-      {isLogin && (
+      {!isLogin && (
         <View>
           <Text style={styles.heading}>
             {"Vous n'êtes plus qu'à un pas de décrocher un bon stage"}

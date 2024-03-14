@@ -28,29 +28,7 @@ const Profile = () => {
   };
 
   const getProfileData = async () => {
-    try {
-      const id = await AsyncStorage.getItem('USER_ID');
-      // check if the user ID exist in AsyncStorage
-      if(!id) {
-        console.log('no user Id found');
-        return;
-      }
-
-      const userDoc = firestore().collection('users').doc(id);
-      const snapshot = await userDoc.get();
-
-      if(snapshot.exists) {
-        setUserData(snapshot.data());
-        console.log('Data from firestore:', snapshot.data());
-      } else {
-        console.log("document doesn't exist");
-        setUserData(null);
-      }
-    }catch (error) {
-      console.error('error fetching document:', error)
-    }
-    
-    /*const id = await AsyncStorage.getItem('USER_ID');
+    const id = await AsyncStorage.getItem('USER_ID');
     console.log('ID:', id);
 
     firestore()
@@ -68,12 +46,12 @@ const Profile = () => {
       })
       .catch(error => {
         console.error('Error fetching document:', error);
-      });*/
+      });
   };
 
   return (
     <View style={styles.container}>
-      {isLogin && (
+      {!isLogin && (
         <NoLoginComponent
           desc={
             'Mettez les informations vous concernant pour mieux situer la compagnie'
@@ -81,7 +59,7 @@ const Profile = () => {
           heading={'Gérez votre profil ici...'}
         />
       )}
-      {!isLogin && (
+      {isLogin && (
         <View style={styles.mainView}>
           <TouchableOpacity style={{marginLeft: 20, marginTop: 20}}>
             <Image
