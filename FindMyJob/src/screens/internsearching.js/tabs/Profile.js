@@ -152,6 +152,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'absolute',
     bottom: 0,
+    left: 0, // Assurez-vous que le modal commence à partir de la gauche
+    right: 0,
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),
   },

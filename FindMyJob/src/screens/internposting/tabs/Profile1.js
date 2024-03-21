@@ -1,15 +1,14 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
-  verticalScale,
 } from 'react-native-size-matters';
-import {BG_COLOR, TEXT_BLUE, TEXT_COLOR} from '../../../utils/Colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
 import ProfileOptionItem from '../../../common/ProfileOptionItem';
+import {BG_COLOR, TEXT_BLUE, TEXT_COLOR} from '../../../utils/Colors';
 
 const Profile1 = ({onInternsClick}) => {
   const [name, setName] = useState('');
@@ -29,6 +28,20 @@ const Profile1 = ({onInternsClick}) => {
       setProfileImg();
     }
   };
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('NAME');
+      await AsyncStorage.removeItem('INTERNS');
+      await AsyncStorage.removeItem('PROFILE_IMAGE');
+      // Ajoutez d'autres éléments à supprimer si nécessaire
+
+      // Rediriger vers la page SelectUser
+      navigation.navigate('SelectUser');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion :', error);
+    }
+  };
+
   return (
     <View>
       <Text style={styles.heading}>INTERNGLOBE</Text>
@@ -77,8 +90,8 @@ const Profile1 = ({onInternsClick}) => {
         />
         <ProfileOptionItem
           icon={require('../../../images/logout.png')}
-          title={'Deconnexion'}
-          onClick={() => {}}
+          title={'Déconnexion'}
+          onClick={handleLogout}
         />
       </View>
     </View>
