@@ -3,6 +3,8 @@ import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Modal from 'react-native-modal';
+import {moderateScale, scale} from 'react-native-size-matters';
 import NoLoginComponent from '../../../common/NoLoginComponent';
 import {BG_COLOR} from '../../../utils/Colors';
 
@@ -72,8 +74,29 @@ const Profile = () => {
           <TouchableOpacity style={styles.editBtn}>
             <Text>Modifier le profil</Text>
           </TouchableOpacity>
+          <View style={styles.headingView}>
+            <Text
+              style={{
+                fontSize: moderateScale(20),
+                fontWeight: '600',
+                marginLeft: moderateScale(20),
+              }}>
+              {'Competences'}
+            </Text>
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontWeight: '600',
+                marginLeft: moderateScale(20),
+              }}>
+              {'+'}
+            </Text>
+          </View>
         </View>
       )}
+      <Modal isVisible backdropOpacity={0.5}>
+        <View style={styles.skillModal}></View>
+      </Modal>
     </View>
   );
 };
@@ -114,5 +137,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
     marginLeft: 20,
+  },
+  headingView: {
+    width: '90%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: moderateScale(30),
+    alignSelf: 'center',
+  },
+  skillModal: {
+    width: '100%',
+    height: scale(200),
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: 0,
+    borderTopLeftRadius: moderateScale(20),
+    borderTopRightRadius: moderateScale(20),
   },
 });
