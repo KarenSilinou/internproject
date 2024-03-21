@@ -2,11 +2,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import {moderateScale, scale} from 'react-native-size-matters';
 import NoLoginComponent from '../../../common/NoLoginComponent';
-import {BG_COLOR} from '../../../utils/Colors';
+import {BG_COLOR, TEXT_BLUE} from '../../../utils/Colors';
 
 const Profile = () => {
   const isFocused = useIsFocused();
@@ -49,6 +56,19 @@ const Profile = () => {
       .catch(error => {
         console.error('Error fetching document:', error);
       });
+  };
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('NAME');
+      await AsyncStorage.removeItem('INTERNS');
+      await AsyncStorage.removeItem('PROFILE_IMAGE');
+      // Ajoutez d'autres éléments à supprimer si nécessaire
+
+      // Rediriger vers la page SelectUser
+      navigation.navigate('SelectUser');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion :', error);
+    }
   };
 
   return (
@@ -94,9 +114,27 @@ const Profile = () => {
           </View>
         </View>
       )}
-      <Modal isVisible backdropOpacity={0.5}>
-        <View style={styles.skillModal}></View>
+      <Modal isVisible backdropOpacity={0.5} style={{margin: 0}}>
+        <View style={styles.skillModal}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.title}>Ajouter une competence</Text>
+            <TouchableOpacity>
+              <Image
+                source={require('../../../images/close.png')}
+                style={styles.closeIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            placeholderTextColor={'#9e9e9e'}
+            placeholder="Entrer la competence"
+            style={styles.input}
+          />
+        </View>
       </Modal>
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+        <Text style={styles.logoutText}>Déconnexion</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -152,9 +190,33 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'absolute',
     bottom: 0,
-    left: 0, // Assurez-vous que le modal commence à partir de la gauche
-    right: 0,
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),
+  },
+  closeIcon: {
+    width: scale(20),
+    height: scale(20),
+  },
+  modalHeader: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: moderateScale(20),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: moderateScale(18),
+    fontWeight: '500',
+    color: TEXT_BLUE,
+  },
+  input: {
+    width: '90%',
+    height: scale(40),
+    borderWidth: 1,
+    borderRadius: moderateScale(10),
+    alignSelf: 'center',
+    marginTop: moderateScale(20),
+    paddingLeft: moderateScale(20),
   },
 });
