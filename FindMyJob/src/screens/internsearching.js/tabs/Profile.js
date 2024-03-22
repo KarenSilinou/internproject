@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import {moderateScale, scale} from 'react-native-size-matters';
 import NoLoginComponent from '../../../common/NoLoginComponent';
@@ -22,6 +23,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [openSkillModal, setSkillModal] = useState(false);
   const [skill, setSkill] = useState('');
+  const [skillsList, setSkillsList] = useState([]);
 
   useEffect(() => {
     getData();
@@ -48,16 +50,8 @@ const Profile = () => {
       .doc(id)
       .get()
       .then(data => {
-        console.log('Data from Firestore:', data);
-        if (data.exists) {
-          console.log('Data exists:', data.data());
-          setUserData(data.data());
-        } else {
-          console.log('Document does not exist');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching document:', error);
+        console.log(data.data());
+        setUserData(data.data());
       });
   };
 
@@ -71,6 +65,8 @@ const Profile = () => {
       })
       .then(() => {
         Alert.alert('Competence ajoutee');
+        setSkill('');
+        getSkills();
       });
   };
 
@@ -86,6 +82,30 @@ const Profile = () => {
     } catch (error) {
       console.error('Erreur lors de la déconnexion :', error);
     }
+  };
+
+  useEffect(() => {
+    getSkills();
+  }, []);
+  const getSkills = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('skills')
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        let temp = [];
+        snapshot.docs.forEach(item => {
+          temp.push({...item.data(), skillId: item.id});
+        });
+        setSkillsList(temp);
+        console.log(snapshot.docs);
+      });
+  };
+
+  const deleteSkill = id => {
+    firestore().collection('skills').doc(id).delete();
+    getSkills();
   };
 
   return (
@@ -132,6 +152,28 @@ const Profile = () => {
               {'+'}
             </Text>
           </View>
+          <FlatList
+            data={skillsList}
+            renderItem={({item, index}) => {
+              return (
+                <View style={styles.skillItem}>
+                  <Text style={styles.skillName}>{item.skill}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteSkill(item.skillId);
+                    }}>
+                    <Image
+                      source={require('../../../images/close.png')}
+                      style={[
+                        styles.closeIcon,
+                        {width: scale(14), height: scale(14)},
+                      ]}
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+          />
         </View>
       )}
       <Modal
@@ -154,6 +196,60 @@ const Profile = () => {
           <TextInput
             placeholderTextColor={'#9e9e9e'}
             placeholder="Entrer la competence"
+            style={styles.input}
+            value={skill}
+            onChangeText={txt => setSkill(txt)}
+          />
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              setSkillModal(false);
+              if (skill != '') {
+                addSkill();
+              }
+            }}>
+            <Text style={styles.btnText}>Ajouter</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal isVisible backdropOpacity={0.5} style={{margin: 0}}>
+        <View style={styles.skillModal}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.title}>Ajouter une formation</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setSkillModal(false);
+              }}>
+              <Image
+                source={require('../../../images/close.png')}
+                style={styles.closeIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            placeholderTextColor={'#9e9e9e'}
+            placeholder="Entrer l'etablissement"
+            style={styles.input}
+            value={skill}
+            onChangeText={txt => setSkill(txt)}
+          />
+          <TextInput
+            placeholderTextColor={'#9e9e9e'}
+            placeholder="Entrer l'annee de debut"
+            style={styles.input}
+            value={skill}
+            onChangeText={txt => setSkill(txt)}
+          />
+          <TextInput
+            placeholderTextColor={'#9e9e9e'}
+            placeholder="Entrer l'annee de fin"
+            style={styles.input}
+            value={skill}
+            onChangeText={txt => setSkill(txt)}
+          />
+          <TextInput
+            placeholderTextColor={'#9e9e9e'}
+            placeholder="Diplome obtenu"
             style={styles.input}
             value={skill}
             onChangeText={txt => setSkill(txt)}
@@ -224,7 +320,7 @@ const styles = StyleSheet.create({
   },
   skillModal: {
     width: '100%',
-    height: scale(200),
+    paddingBottom: moderateScale(20),
     backgroundColor: 'white',
     position: 'absolute',
     bottom: 0,
@@ -271,5 +367,18 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(18),
     fontWeight: '500',
     color: BG_COLOR,
+  },
+  skillItem: {
+    width: '90%',
+    alignSelf: 'center',
+    height: scale(50),
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: moderateScale(20),
+    justifyContent: 'space-between',
+  },
+  skillName: {
+    fontSize: moderateScale(20),
+    fontWeight: '500',
   },
 });
