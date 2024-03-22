@@ -22,8 +22,14 @@ const Profile = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [openSkillModal, setSkillModal] = useState(false);
+  const [openEducationModal, setOpenEducationModal] = useState(false);
   const [skill, setSkill] = useState('');
   const [skillsList, setSkillsList] = useState([]);
+  const [educationList, setEducationList] = useState([]);
+  const [education, setEducation] = useState('');
+  const [startYear, setStartYear] = useState('');
+  const [endYear, setEndYear] = useState('');
+  const [diplome, setDiplome] = useState('');
 
   useEffect(() => {
     getData();
@@ -70,6 +76,27 @@ const Profile = () => {
       });
   };
 
+  const addEducation = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('education')
+      .add({
+        education: education,
+        startYear: startYear,
+        endYear: endYear,
+        diplome: diplome,
+        userId: id,
+      })
+      .then(() => {
+        Alert.alert('Formation ajoutee');
+        setEducation('');
+        setStartYear('');
+        setEndYear('');
+        setDiplome('');
+        getEducationList();
+      });
+  };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('NAME');
@@ -86,7 +113,9 @@ const Profile = () => {
 
   useEffect(() => {
     getSkills();
+    getEducationList();
   }, []);
+
   const getSkills = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
@@ -99,6 +128,22 @@ const Profile = () => {
           temp.push({...item.data(), skillId: item.id});
         });
         setSkillsList(temp);
+        console.log(snapshot.docs);
+      });
+  };
+
+  const getEducationList = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('education')
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        let temp = [];
+        snapshot.docs.forEach(item => {
+          temp.push({...item.data(), educId: item.id});
+        });
+        setEducationList(temp);
         console.log(snapshot.docs);
       });
   };
@@ -134,9 +179,8 @@ const Profile = () => {
           <View style={styles.headingView}>
             <Text
               style={{
-                fontSize: moderateScale(20),
+                fontSize: moderateScale(24),
                 fontWeight: '600',
-                marginLeft: moderateScale(20),
               }}>
               {'Competences'}
             </Text>
@@ -152,28 +196,51 @@ const Profile = () => {
               {'+'}
             </Text>
           </View>
-          <FlatList
-            data={skillsList}
-            renderItem={({item, index}) => {
-              return (
-                <View style={styles.skillItem}>
-                  <Text style={styles.skillName}>{item.skill}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      deleteSkill(item.skillId);
-                    }}>
-                    <Image
-                      source={require('../../../images/close.png')}
-                      style={[
-                        styles.closeIcon,
-                        {width: scale(14), height: scale(14)},
-                      ]}
-                    />
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
+          <View>
+            <FlatList
+              data={skillsList}
+              renderItem={({item, index}) => {
+                return (
+                  <View style={styles.skillItem}>
+                    <Text style={styles.skillName}>{item.skill}</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        deleteSkill(item.skillId);
+                      }}>
+                      <Image
+                        source={require('../../../images/close.png')}
+                        style={[
+                          styles.closeIcon,
+                          {width: scale(14), height: scale(14)},
+                        ]}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
+          </View>
+
+          <View style={styles.headingView}>
+            <Text
+              style={{
+                fontSize: moderateScale(24),
+                fontWeight: '600',
+              }}>
+              {'Formation'}
+            </Text>
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontWeight: '600',
+                marginLeft: moderateScale(20),
+              }}
+              onPress={() => {
+                setOpenEducationModal(true);
+              }}>
+              {'+'}
+            </Text>
+          </View>
         </View>
       )}
       <Modal
@@ -212,13 +279,16 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
       </Modal>
-      <Modal isVisible backdropOpacity={0.5} style={{margin: 0}}>
+      <Modal
+        isVisible={openEducationModal}
+        backdropOpacity={0.5}
+        style={{margin: 0}}>
         <View style={styles.skillModal}>
           <View style={styles.modalHeader}>
             <Text style={styles.title}>Ajouter une formation</Text>
             <TouchableOpacity
               onPress={() => {
-                setSkillModal(false);
+                setOpenEducationModal(false);
               }}>
               <Image
                 source={require('../../../images/close.png')}
@@ -230,36 +300,40 @@ const Profile = () => {
             placeholderTextColor={'#9e9e9e'}
             placeholder="Entrer l'etablissement"
             style={styles.input}
-            value={skill}
-            onChangeText={txt => setSkill(txt)}
+            value={education}
+            onChangeText={txt => setEducation(txt)}
           />
           <TextInput
             placeholderTextColor={'#9e9e9e'}
             placeholder="Entrer l'annee de debut"
             style={styles.input}
-            value={skill}
-            onChangeText={txt => setSkill(txt)}
+            maxLength={4}
+            keyboardType="numeric"
+            value={startYear}
+            onChangeText={txt => setStartYear(txt)}
           />
           <TextInput
             placeholderTextColor={'#9e9e9e'}
             placeholder="Entrer l'annee de fin"
             style={styles.input}
-            value={skill}
-            onChangeText={txt => setSkill(txt)}
+            maxLength={4}
+            keyboardType="numeric"
+            value={endYear}
+            onChangeText={txt => setEndYear(txt)}
           />
           <TextInput
             placeholderTextColor={'#9e9e9e'}
             placeholder="Diplome obtenu"
             style={styles.input}
-            value={skill}
-            onChangeText={txt => setSkill(txt)}
+            value={diplome}
+            onChangeText={txt => setDiplome(txt)}
           />
           <TouchableOpacity
             style={styles.btn}
             onPress={() => {
-              setSkillModal(false);
-              if (skill != '') {
-                addSkill();
+              setOpenEducationModal(false);
+              if (education != '' && startYear != '' && endYear != '') {
+                addEducation();
               }
             }}>
             <Text style={styles.btnText}>Ajouter</Text>
@@ -378,7 +452,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   skillName: {
-    fontSize: moderateScale(20),
+    fontSize: moderateScale(18),
     fontWeight: '500',
   },
 });
