@@ -3,6 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -19,6 +20,8 @@ const Profile = () => {
   const isFocused = useIsFocused();
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [openSkillModal, setSkillModal] = useState(false);
+  const [skill, setSkill] = useState('');
 
   useEffect(() => {
     getData();
@@ -57,6 +60,20 @@ const Profile = () => {
         console.error('Error fetching document:', error);
       });
   };
+
+  const addSkill = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('skills')
+      .add({
+        skill: skill,
+        userId: id,
+      })
+      .then(() => {
+        Alert.alert('Competence ajoutee');
+      });
+  };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('NAME');
@@ -108,17 +125,26 @@ const Profile = () => {
                 fontSize: moderateScale(30),
                 fontWeight: '600',
                 marginLeft: moderateScale(20),
+              }}
+              onPress={() => {
+                setSkillModal(true);
               }}>
               {'+'}
             </Text>
           </View>
         </View>
       )}
-      <Modal isVisible backdropOpacity={0.5} style={{margin: 0}}>
+      <Modal
+        isVisible={openSkillModal}
+        backdropOpacity={0.5}
+        style={{margin: 0}}>
         <View style={styles.skillModal}>
           <View style={styles.modalHeader}>
             <Text style={styles.title}>Ajouter une competence</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setSkillModal(false);
+              }}>
               <Image
                 source={require('../../../images/close.png')}
                 style={styles.closeIcon}
@@ -129,7 +155,19 @@ const Profile = () => {
             placeholderTextColor={'#9e9e9e'}
             placeholder="Entrer la competence"
             style={styles.input}
+            value={skill}
+            onChangeText={txt => setSkill(txt)}
           />
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              setSkillModal(false);
+              if (skill != '') {
+                addSkill();
+              }
+            }}>
+            <Text style={styles.btnText}>Ajouter</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
       <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
@@ -218,5 +256,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: moderateScale(20),
     paddingLeft: moderateScale(20),
+  },
+  btn: {
+    width: '90%',
+    height: scale(45),
+    backgroundColor: TEXT_BLUE,
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
+    marginTop: moderateScale(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    fontSize: moderateScale(18),
+    fontWeight: '500',
+    color: BG_COLOR,
   },
 });
