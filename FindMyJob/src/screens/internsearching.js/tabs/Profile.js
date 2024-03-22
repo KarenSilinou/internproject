@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import {moderateScale, scale} from 'react-native-size-matters';
 import NoLoginComponent from '../../../common/NoLoginComponent';
@@ -153,8 +153,13 @@ const Profile = () => {
     getSkills();
   };
 
+  const deleteEducation = id => {
+    firestore().collection('education').doc(id).delete();
+    getEducationList();
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {!isLogin && (
         <NoLoginComponent
           desc={
@@ -240,6 +245,40 @@ const Profile = () => {
               }}>
               {'+'}
             </Text>
+          </View>
+          <View>
+            <FlatList
+              data={educationList}
+              renderItem={({item, index}) => {
+                return (
+                  <View
+                    style={[
+                      styles.skillItem,
+                      {marginTop: moderateScale(20), height: scale(70)},
+                    ]}>
+                    <View>
+                      <Text style={styles.skillName}>{item.education}</Text>
+                      <Text style={styles.educYear}>
+                        {item.startYear + ' - ' + item.endYear}
+                      </Text>
+                      <Text style={styles.skillName}>{item.diplome}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        deleteEducation(item.educId);
+                      }}>
+                      <Image
+                        source={require('../../../images/close.png')}
+                        style={[
+                          styles.closeIcon,
+                          {width: scale(14), height: scale(14)},
+                        ]}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
           </View>
         </View>
       )}
@@ -339,11 +378,11 @@ const Profile = () => {
             <Text style={styles.btnText}>Ajouter</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+          <Text style={styles.logoutText}>Déconnexion</Text>
+        </TouchableOpacity>
       </Modal>
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-        <Text style={styles.logoutText}>Déconnexion</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -454,5 +493,9 @@ const styles = StyleSheet.create({
   skillName: {
     fontSize: moderateScale(18),
     fontWeight: '500',
+  },
+  educYear: {
+    fontSize: moderateScale(14),
+    marginTop: moderateScale(5),
   },
 });
