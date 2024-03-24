@@ -43,7 +43,7 @@ const SearchIntern = () => {
   const saveInterns = async data => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
-      .collection('save_interns')
+      .collection('saved_interns')
       .add({
         ...data,
         userId: id,
@@ -61,41 +61,35 @@ const SearchIntern = () => {
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
-        console.log(snapshot.docs);
-        if (snapshot.docs.length > 0) {
-          let temp = [];
-          snapshot.docs.forEach(item => {
-            temp.push({...item.data(), savedId: item.id});
-          });
-          setSavedIntern(temp);
-        } else {
-          setSavedIntern([]);
-        }
+        let temp = [];
+        snapshot.docs.forEach(item => {
+          temp.push({...item.data(), savedId: item.id});
+        });
+        setInterns(temp); // Mettre à jour l'état avec toutes les offres enregistrées
       });
   };
 
   const removeSavedIntern = async id => {
-    const docId = await getSavedInterns(id);
     firestore()
       .collection('saved_interns')
-      .doc(docId)
+      .doc(id)
       .delete()
       .then(() => {
-        getSavedInterns();
+        getSavedInterns(); // Mettre à jour la liste des offres enregistrées après la suppression
       });
   };
 
   const checkSavedIntern = id => {
-    let temp = savedInterns;
+    // let temp = savedInterns;
 
-    let isSaved = false;
-    temp.map(item => {
-      console.log('saved item:'), item;
-      if (item.id == id) {
-        isSaved = true;
-      }
-    });
-    return isSaved;
+    // let isSaved = false;
+    // temp.map(item => {
+    //   console.log('saved item:'), item;
+    //   if (item.id == id) {
+    //     isSaved = true;
+    //   }
+    // });
+    return savedInterns.some(item => item.id === id);
   };
 
   const getSavedInternsId = async idd => {
