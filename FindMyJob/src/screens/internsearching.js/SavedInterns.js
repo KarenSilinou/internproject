@@ -14,9 +14,9 @@ import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {BG_COLOR, TEXT_COLOR} from '../../utils/Colors';
 
 const SavedInterns = () => {
-  const [search, setSearch] = useState('');
   const [interns, setInterns] = useState([]);
   const navigation = useNavigation();
+
   useEffect(() => {
     getInterns();
   }, []);
@@ -28,7 +28,6 @@ const SavedInterns = () => {
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
-        console.log(snapshot.docs);
         let temp = [];
         snapshot.docs.forEach(item => {
           temp.push({...item.data(), savedId: item.id});

@@ -61,21 +61,27 @@ const SearchIntern = () => {
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
-        let temp = [];
-        snapshot.docs.forEach(item => {
-          temp.push({...item.data(), savedId: item.id});
-        });
-        setInterns(temp); // Mettre à jour l'état avec toutes les offres enregistrées
+        console.log(snapshot.docs);
+        if (snapshot.docs.length > 0) {
+          let temp = [];
+          snapshot.docs.forEach(item => {
+            temp.push({...item.data(), savedId: item.id});
+          });
+          setSavedIntern(temp);
+        } else {
+          setSavedIntern([]);
+        }
       });
   };
 
   const removeSavedIntern = async id => {
+    const docId = await getSavedInterns(id);
     firestore()
       .collection('saved_interns')
-      .doc(id)
+      .doc(docId)
       .delete()
       .then(() => {
-        getSavedInterns(); // Mettre à jour la liste des offres enregistrées après la suppression
+        getSavedInterns();
       });
   };
 
