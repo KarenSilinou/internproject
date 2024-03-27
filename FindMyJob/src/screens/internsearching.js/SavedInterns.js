@@ -16,9 +16,11 @@ import {BG_COLOR, TEXT_COLOR} from '../../utils/Colors';
 const SavedInterns = () => {
   const [interns, setInterns] = useState([]);
   const navigation = useNavigation();
+  const [appliedInterns, setAppliedInterns] = useState([]);
 
   useEffect(() => {
     getInterns();
+    getAppliedInterns();
   }, []);
 
   const getInterns = async () => {
@@ -43,6 +45,21 @@ const SavedInterns = () => {
       .delete()
       .then(() => {
         getInterns();
+      });
+  };
+
+  const getAppliedInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('applied_interns') // Nom de la collection pour les stages postulés
+      .where('userId', '==', id)
+      .get()
+      .then(snapshot => {
+        let temp = [];
+        snapshot.docs.forEach(item => {
+          temp.push({...item.data(), appliedId: item.id});
+        });
+        setAppliedInterns(temp);
       });
   };
 
