@@ -10,7 +10,6 @@ const InternDetails = () => {
   const route = useRoute();
   const isFocused = useIsFocused();
   const [isLogin, setIsLogin] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [savedInternId, setSavedInternId] = useState('');
   const [appliedInternId, setAppliedInternId] = useState('');
   const [isInternSaved, setIsInternSaved] = useState(false);
@@ -25,17 +24,15 @@ const InternDetails = () => {
   const getData = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     const type = await AsyncStorage.getItem('USER_TYPE');
-    if (id != null && type != null) {
-      if (type == 'user') {
-        setIsLogin(true);
-      }
+    if (id != null && type === 'user') {
+      setIsLogin(true);
     }
   };
 
   const saveInterns = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
-      .collection('save_interns')
+      .collection('saved_interns')
       .add({
         ...route.params.data,
         userId: id,
@@ -49,7 +46,6 @@ const InternDetails = () => {
   const applyIntern = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     if (!isInternApplied) {
-      // Vérifier si le stage n'a pas déjà été postulé
       firestore()
         .collection('applied_interns')
         .add({
@@ -59,6 +55,7 @@ const InternDetails = () => {
         .then(() => {
           console.log('intern applied successfully');
           getAppliedInterns();
+          setIsInternApplied(true);
         });
     }
   };
@@ -70,18 +67,12 @@ const InternDetails = () => {
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
-        console.log(snapshot.docs);
-        if (snapshot.docs.length > 0) {
-          snapshot.docs.forEach(item => {
-            if (item.data().id == route.params.data.id) {
-              setIsInternSaved(true);
-              setSavedInternId(item.id);
-            }
-          });
-        } else {
-          setIsInternSaved(false);
-          setSavedInternId('');
-        }
+        snapshot.docs.forEach(item => {
+          if (item.data().id === route.params.data.id) {
+            setIsInternSaved(true);
+            setSavedInternId(item.id);
+          }
+        });
       });
   };
 
@@ -92,18 +83,12 @@ const InternDetails = () => {
       .where('userId', '==', id)
       .get()
       .then(snapshot => {
-        console.log(snapshot.docs);
-        if (snapshot.docs.length > 0) {
-          snapshot.docs.forEach(item => {
-            if (item.data().id == route.params.data.id) {
-              setIsInternApplied(true);
-              setAppliedInternId(item.id);
-            }
-          });
-        } else {
-          setIsInternApplied(false);
-          setAppliedInternId('');
-        }
+        snapshot.docs.forEach(item => {
+          if (item.data().id === route.params.data.id) {
+            setIsInternApplied(true);
+            setAppliedInternId(item.id);
+          }
+        });
       });
   };
 
@@ -124,6 +109,7 @@ const InternDetails = () => {
       .delete()
       .then(() => {
         getAppliedInterns();
+        setIsInternApplied(false);
       });
   };
 
@@ -180,7 +166,7 @@ const InternDetails = () => {
             }
           }}>
           <Text style={styles.btnText}>
-            {isInternApplied ? 'Vous avez postule' : 'Postuler pour le stage'}
+            {isInternApplied ? 'Vous avez postulé' : 'Postuler pour le stage'}
           </Text>
         </TouchableOpacity>
       </View>
