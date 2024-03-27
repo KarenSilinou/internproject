@@ -48,16 +48,19 @@ const InternDetails = () => {
 
   const applyIntern = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
-    firestore()
-      .collection('applied_interns')
-      .add({
-        ...route.params.data,
-        userId: id,
-      })
-      .then(() => {
-        console.log('intern applied successfully');
-        getAppliedInterns();
-      });
+    if (!isInternApplied) {
+      // Vérifier si le stage n'a pas déjà été postulé
+      firestore()
+        .collection('applied_interns')
+        .add({
+          ...route.params.data,
+          userId: id,
+        })
+        .then(() => {
+          console.log('intern applied successfully');
+          getAppliedInterns();
+        });
+    }
   };
 
   const getSavedInterns = async () => {
