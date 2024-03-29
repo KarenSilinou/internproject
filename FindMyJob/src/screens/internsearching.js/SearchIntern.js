@@ -3,6 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -24,10 +25,10 @@ const SearchIntern = () => {
   const searchIntern = txt => {
     firestore()
       .collection('interns')
-      .where('internTitle', '==', txt)
+      .where('internTitle', '>=', txt)
+      .where('internTitle', '<=', txt + '\uf8ff')
       .get()
       .then(snapshot => {
-        console.log(snapshot.docs);
         let temp = [];
         snapshot.docs.forEach(item => {
           temp.push({...item.data()});
@@ -143,49 +144,62 @@ const SearchIntern = () => {
           </TouchableOpacity>
         )}
       </View>
-      <FlatList
-        data={interns}
-        renderItem={({item, index}) => {
-          console.log(item);
-          return (
-            <TouchableOpacity
-              style={styles.internItem}
-              onPress={() => {
-                navigation.navigate('InternDetails', {
-                  data: item,
-                });
-              }}>
-              <View style={styles.topView}>
-                <Text style={styles.internTitle}>{item.internTitle}</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (checkSavedIntern(item.id)) {
-                      removeSavedIntern(item.savedId);
-                    } else {
-                      saveInterns(item);
-                    }
-                  }}>
-                  <Image
-                    source={
-                      checkSavedIntern(item.id)
-                        ? require('../../images/star1.png')
-                        : require('../../images/star.png')
-                    }
-                    style={styles.icon}
-                  />
-                </TouchableOpacity>
-              </View>
+      {search !== '' && (
+        <>
+          {loading ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : interns.length > 0 ? (
+            <FlatList data={interns} renderItem={renderItem} />
+          ) : (
+            <Text>Aucun résultat trouvé</Text>
+          )}
+        </>
+      )}
+      {search != '' && interns.length > 0 && (
+        <FlatList
+          data={interns}
+          renderItem={({item, index}) => {
+            console.log(item);
+            return (
+              <TouchableOpacity
+                style={styles.internItem}
+                onPress={() => {
+                  navigation.navigate('InternDetails', {
+                    data: item,
+                  });
+                }}>
+                <View style={styles.topView}>
+                  <Text style={styles.internTitle}>{item.internTitle}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (checkSavedIntern(item.id)) {
+                        removeSavedIntern(item.savedId);
+                      } else {
+                        saveInterns(item);
+                      }
+                    }}>
+                    <Image
+                      source={
+                        checkSavedIntern(item.id)
+                          ? require('../../images/star1.png')
+                          : require('../../images/star.png')
+                      }
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                </View>
 
-              <Text style={styles.subTitle}>
-                {'Categorie: ' + item.category}
-              </Text>
-              <Text style={styles.subTitle}>
-                {'Poster par: ' + item.posterName}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
+                <Text style={styles.subTitle}>
+                  {'Categorie: ' + item.category}
+                </Text>
+                <Text style={styles.subTitle}>
+                  {'Poster par: ' + item.posterName}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
     </View>
   );
 };
