@@ -173,7 +173,10 @@ const InternDetails = () => {
           disabled={!isLogin}
           style={[
             styles.applyBtn,
-            {backgroundColor: isLogin ? '#00B5E8' : '#9e9e9e'},
+            {
+              backgroundColor:
+                isLogin && isInternApplied ? '#9e9e9e' : '#00B5E8',
+            }, // Update color condition
           ]}
           onPress={() => {
             if (!isInternApplied) {
