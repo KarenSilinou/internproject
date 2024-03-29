@@ -29,34 +29,33 @@ const InternDetails = () => {
     }
   };
 
-  const saveInterns = async () => {
-    const id = await AsyncStorage.getItem('USER_ID');
-    firestore()
-      .collection('saved_interns')
-      .add({
-        ...route.params.data,
-        userId: id,
-      })
-      .then(() => {
-        console.log('intern saved successfully');
-        getSavedInterns();
-      });
-  };
-
   const applyIntern = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     if (!isInternApplied) {
       firestore()
         .collection('applied_interns')
-        .add({
-          ...route.params.data,
-          userId: id,
-        })
-        .then(() => {
-          console.log('intern applied successfully');
-          getAppliedInterns();
-          setIsInternApplied(true);
+        .where('userId', '==', id)
+        .where('id', '==', route.params.data.id)
+        .get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            firestore()
+              .collection('applied_interns')
+              .add({
+                ...route.params.data,
+                userId: id,
+              })
+              .then(() => {
+                console.log('intern applied successfully');
+                getAppliedInterns();
+                setIsInternApplied(true);
+              });
+          } else {
+            console.log('Vous avez déjà postulé pour ce stage.');
+          }
         });
+    } else {
+      console.log('Vous avez déjà postulé pour ce stage.');
     }
   };
 
@@ -92,6 +91,21 @@ const InternDetails = () => {
       });
   };
 
+  const saveInterns = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('saved_interns')
+      .add({
+        ...route.params.data,
+        userId: id,
+      })
+      .then(() => {
+        console.log('intern saved successfully');
+        getSavedInterns();
+        setIsInternSaved(true); // Mettre à jour l'état pour indiquer que le stage est maintenant enregistré
+      });
+  };
+
   const removeSavedIntern = () => {
     firestore()
       .collection('saved_interns')
@@ -99,6 +113,7 @@ const InternDetails = () => {
       .delete()
       .then(() => {
         getSavedInterns();
+        setIsInternSaved(false); // Mettre à jour l'état pour indiquer que le stage n'est plus enregistré
       });
   };
 

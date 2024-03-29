@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -30,6 +30,7 @@ const Profile = () => {
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
   const [diplome, setDiplome] = useState('');
+  const navigation = useNavigation();
 
   useEffect(() => {
     getData();
@@ -97,20 +98,6 @@ const Profile = () => {
       });
   };
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('NAME');
-      await AsyncStorage.removeItem('INTERNS');
-      await AsyncStorage.removeItem('PROFILE_IMAGE');
-      // Ajoutez d'autres éléments à supprimer si nécessaire
-
-      // Rediriger vers la page SelectUser
-      navigation.navigate('SelectUser');
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion :', error);
-    }
-  };
-
   useEffect(() => {
     getSkills();
     getEducationList();
@@ -158,6 +145,19 @@ const Profile = () => {
     getEducationList();
   };
 
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('NAME');
+      await AsyncStorage.removeItem('INTERNS');
+      await AsyncStorage.removeItem('PROFILE_IMAGE');
+      // Ajoutez d'autres éléments à supprimer si nécessaire
+      // Rediriger vers la page SelectUser
+      navigation.navigate('SelectUser');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion :', error);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       {!isLogin && (
@@ -180,6 +180,9 @@ const Profile = () => {
           <Text style={styles.email}>{userData ? userData.email : 'NA'}</Text>
           <TouchableOpacity style={styles.editBtn}>
             <Text>Modifier le profil</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+            <Text style={styles.logoutText}>Déconnexion</Text>
           </TouchableOpacity>
           <View style={styles.headingView}>
             <Text
@@ -497,5 +500,20 @@ const styles = StyleSheet.create({
   educYear: {
     fontSize: moderateScale(14),
     marginTop: moderateScale(5),
+  },
+  logoutBtn: {
+    width: '90%',
+    height: scale(45),
+    backgroundColor: TEXT_BLUE,
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
+    marginTop: moderateScale(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutText: {
+    fontSize: moderateScale(18),
+    fontWeight: '500',
+    color: BG_COLOR,
   },
 });

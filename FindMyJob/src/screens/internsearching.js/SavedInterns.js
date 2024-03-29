@@ -23,6 +23,26 @@ const SavedInterns = () => {
     getAppliedInterns();
   }, []);
 
+  const saveInterns = async item => {
+    const id = await AsyncStorage.getItem('USER_ID');
+    firestore()
+      .collection('saved_interns')
+      .add({
+        internTitle: item.internTitle,
+        category: item.category,
+        posterName: item.posterName,
+        // Ajoutez ici les autres champs que vous souhaitez enregistrer
+        userId: id,
+      })
+      .then(() => {
+        console.log('Stage enregistré avec succès');
+        getInterns(); // Mettre à jour la liste des stages enregistrés
+      })
+      .catch(error => {
+        console.error("Erreur lors de l'enregistrement du stage:", error);
+      });
+  };
+
   const getInterns = async () => {
     const id = await AsyncStorage.getItem('USER_ID');
     firestore()
@@ -38,10 +58,10 @@ const SavedInterns = () => {
       });
   };
 
-  const removeSavedIntern = id => {
+  const removeSavedIntern = savedId => {
     firestore()
       .collection('saved_interns')
-      .doc(id)
+      .doc(savedId) // Utiliser savedId directement comme identifiant du document à supprimer
       .delete()
       .then(() => {
         getInterns();
