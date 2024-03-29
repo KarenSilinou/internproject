@@ -35,14 +35,13 @@ const InternDetails = () => {
       firestore()
         .collection('applied_interns')
         .where('userId', '==', id)
-        .where('id', '==', route.params.data.id)
         .get()
         .then(snapshot => {
           if (snapshot.empty) {
             firestore()
               .collection('applied_interns')
               .add({
-                ...route.params.data,
+                ...route.params.data, // N'incluez pas l'ID de l'internship ici
                 userId: id,
               })
               .then(() => {
@@ -102,7 +101,7 @@ const InternDetails = () => {
       .then(() => {
         console.log('intern saved successfully');
         getSavedInterns();
-        setIsInternSaved(true); // Mettre à jour l'état pour indiquer que le stage est maintenant enregistré
+        setIsInternSaved(true); // Update state to reflect saved status
       });
   };
 
@@ -113,19 +112,22 @@ const InternDetails = () => {
       .delete()
       .then(() => {
         getSavedInterns();
-        setIsInternSaved(false); // Mettre à jour l'état pour indiquer que le stage n'est plus enregistré
+        setIsInternSaved(false); // Update state to reflect removed status
       });
   };
 
-  const cancelApply = () => {
-    firestore()
-      .collection('applied_interns')
-      .doc(appliedInternId)
-      .delete()
-      .then(() => {
-        getAppliedInterns();
-        setIsInternApplied(false);
-      });
+  const cancelApply = async () => {
+    // Define the cancelApply function correctly
+    try {
+      await firestore()
+        .collection('applied_interns')
+        .doc(appliedInternId)
+        .delete();
+      getAppliedInterns();
+      setIsInternApplied(false);
+    } catch (error) {
+      console.error('Error canceling application:', error); // Handle any errors
+    }
   };
 
   return (
