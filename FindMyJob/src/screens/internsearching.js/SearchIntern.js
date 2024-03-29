@@ -3,7 +3,6 @@ import firestore from '@react-native-firebase/firestore';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -87,15 +86,6 @@ const SearchIntern = () => {
   };
 
   const checkSavedIntern = id => {
-    // let temp = savedInterns;
-
-    // let isSaved = false;
-    // temp.map(item => {
-    //   console.log('saved item:'), item;
-    //   if (item.id == id) {
-    //     isSaved = true;
-    //   }
-    // });
     return savedInterns.some(item => item.id === id);
   };
 
@@ -127,8 +117,8 @@ const SearchIntern = () => {
           style={styles.input}
           value={search}
           onChangeText={txt => {
-            setSearch(txt);
-            searchIntern(txt);
+            setSearch(txt); // Update state
+            searchIntern(txt); // Call search function
           }}
         />
         {search != '' && (
@@ -144,61 +134,58 @@ const SearchIntern = () => {
           </TouchableOpacity>
         )}
       </View>
-      {search !== '' && (
+      {search != '' && (
         <>
-          {loading ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : interns.length > 0 ? (
-            <FlatList data={interns} renderItem={renderItem} />
+          {interns.length > 0 ? (
+            <FlatList
+              data={interns}
+              renderItem={({item, index}) => {
+                console.log(item);
+                return (
+                  <TouchableOpacity
+                    style={styles.internItem}
+                    onPress={() => {
+                      navigation.navigate('InternDetails', {
+                        data: item,
+                      });
+                    }}>
+                    <View style={styles.topView}>
+                      <Text style={styles.internTitle}>{item.internTitle}</Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (checkSavedIntern(item.id)) {
+                            removeSavedIntern(item.savedId);
+                          } else {
+                            saveInterns(item);
+                          }
+                        }}>
+                        <Image
+                          source={
+                            checkSavedIntern(item.id)
+                              ? require('../../images/star1.png')
+                              : require('../../images/star.png')
+                          }
+                          style={styles.icon}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text style={styles.subTitle}>
+                      {'Categorie: ' + item.category}
+                    </Text>
+                    <Text style={styles.subTitle}>
+                      {'Poster par: ' + item.posterName}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }}
+            />
           ) : (
-            <Text>Aucun résultat trouvé</Text>
+            <Text style={styles.noResults}>
+              No results found for "{search}"
+            </Text>
           )}
         </>
-      )}
-      {search != '' && interns.length > 0 && (
-        <FlatList
-          data={interns}
-          renderItem={({item, index}) => {
-            console.log(item);
-            return (
-              <TouchableOpacity
-                style={styles.internItem}
-                onPress={() => {
-                  navigation.navigate('InternDetails', {
-                    data: item,
-                  });
-                }}>
-                <View style={styles.topView}>
-                  <Text style={styles.internTitle}>{item.internTitle}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (checkSavedIntern(item.id)) {
-                        removeSavedIntern(item.savedId);
-                      } else {
-                        saveInterns(item);
-                      }
-                    }}>
-                    <Image
-                      source={
-                        checkSavedIntern(item.id)
-                          ? require('../../images/star1.png')
-                          : require('../../images/star.png')
-                      }
-                      style={styles.icon}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={styles.subTitle}>
-                  {'Categorie: ' + item.category}
-                </Text>
-                <Text style={styles.subTitle}>
-                  {'Poster par: ' + item.posterName}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
       )}
     </View>
   );
