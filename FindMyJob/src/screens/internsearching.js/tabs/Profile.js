@@ -206,7 +206,12 @@ const Profile = () => {
           />
 
           <View style={{...styles.headingView, marginTop: moderateScale(0)}}>
-            <Text style={{fontSize: moderateScale(24), fontWeight: '600'}}>
+            <Text
+              style={{
+                fontSize: moderateScale(24),
+                fontWeight: '600',
+                marginTop: moderateScale(-150),
+              }}>
               Formation
             </Text>
             <Text
@@ -214,6 +219,7 @@ const Profile = () => {
                 fontSize: moderateScale(30),
                 fontWeight: '600',
                 marginLeft: moderateScale(20),
+                marginTop: moderateScale(-143),
               }}
               onPress={() => setOpenEducationModal(true)}>
               +
