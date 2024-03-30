@@ -205,7 +205,7 @@ const Profile = () => {
             keyExtractor={item => item.skillId}
           />
 
-          <View style={styles.headingView}>
+          <View style={{...styles.headingView, marginTop: moderateScale(0)}}>
             <Text style={{fontSize: moderateScale(24), fontWeight: '600'}}>
               Formation
             </Text>
@@ -323,9 +323,6 @@ const Profile = () => {
             <Text style={styles.btnText}>Ajouter</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-          <Text style={styles.logoutText}>Déconnexion</Text>
-        </TouchableOpacity>
       </Modal>
     </View>
   );
@@ -457,5 +454,13 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(18),
     fontWeight: '500',
     color: BG_COLOR,
+  },
+  headingView: {
+    width: '90%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: moderateScale(30),
+    alignSelf: 'center',
   },
 });
