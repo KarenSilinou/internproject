@@ -4,6 +4,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
+  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -11,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import {moderateScale, scale} from 'react-native-size-matters';
 import NoLoginComponent from '../../../common/NoLoginComponent';
@@ -149,7 +149,7 @@ const Profile = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {!isLogin && (
         <NoLoginComponent
           desc={
@@ -174,9 +174,10 @@ const Profile = () => {
           <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
             <Text style={styles.logoutText}>Déconnexion</Text>
           </TouchableOpacity>
+
           <View style={styles.headingView}>
             <Text style={{fontSize: moderateScale(24), fontWeight: '600'}}>
-              {'Compétences'}
+              Compétences
             </Text>
             <Text
               style={{
@@ -184,10 +185,8 @@ const Profile = () => {
                 fontWeight: '600',
                 marginLeft: moderateScale(20),
               }}
-              onPress={() => {
-                setSkillModal(true);
-              }}>
-              {'+'}
+              onPress={() => setSkillModal(true)}>
+              +
             </Text>
           </View>
           <FlatList
@@ -198,19 +197,17 @@ const Profile = () => {
                 <TouchableOpacity onPress={() => deleteSkill(item.skillId)}>
                   <Image
                     source={require('../../../images/close.png')}
-                    style={[
-                      styles.closeIcon,
-                      {width: scale(14), height: scale(14)},
-                    ]}
+                    style={styles.closeIcon}
                   />
                 </TouchableOpacity>
               </View>
             )}
             keyExtractor={item => item.skillId}
           />
+
           <View style={styles.headingView}>
             <Text style={{fontSize: moderateScale(24), fontWeight: '600'}}>
-              {'Formation'}
+              Formation
             </Text>
             <Text
               style={{
@@ -218,34 +215,19 @@ const Profile = () => {
                 fontWeight: '600',
                 marginLeft: moderateScale(20),
               }}
-              onPress={() => {
-                setOpenEducationModal(true);
-              }}>
-              {'+'}
+              onPress={() => setOpenEducationModal(true)}>
+              +
             </Text>
           </View>
           <FlatList
             data={educationList}
             renderItem={({item}) => (
-              <View
-                style={[
-                  styles.skillItem,
-                  {marginTop: moderateScale(20), height: scale(70)},
-                ]}>
-                <View>
-                  <Text style={styles.skillName}>{item.education}</Text>
-                  <Text style={styles.educYear}>
-                    {item.startYear + ' - ' + item.endYear}
-                  </Text>
-                  <Text style={styles.skillName}>{item.diplome}</Text>
-                </View>
+              <View style={styles.skillItem}>
+                <Text style={styles.skillName}>{item.education}</Text>
                 <TouchableOpacity onPress={() => deleteEducation(item.educId)}>
                   <Image
                     source={require('../../../images/close.png')}
-                    style={[
-                      styles.closeIcon,
-                      {width: scale(14), height: scale(14)},
-                    ]}
+                    style={styles.closeIcon}
                   />
                 </TouchableOpacity>
               </View>
@@ -345,7 +327,7 @@ const Profile = () => {
           <Text style={styles.logoutText}>Déconnexion</Text>
         </TouchableOpacity>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
