@@ -371,14 +371,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
   },
-  headingView: {
-    width: '90%',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: moderateScale(30),
-    alignSelf: 'center',
-  },
+
   skillModal: {
     width: '100%',
     paddingBottom: moderateScale(20),

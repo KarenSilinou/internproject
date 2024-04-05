@@ -105,6 +105,7 @@ const LoginForCompany = () => {
         placeholder={'ex: ********'}
         style={styles.textInput}
         bad={badPassword !== ''}
+        secureTextEntry={true}
       />
       {badPassword !== '' && <Text style={styles.errorMsg}>{badPassword}</Text>}
       <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
